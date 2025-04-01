@@ -15,7 +15,7 @@ import com.imaec.portfolio.theme.Gray100
 import com.imaec.portfolio.theme.Gray600
 
 @Composable
-fun Tag(isFull: Boolean, text: String, fontFamily: FontFamily) {
+fun Tag(isFull: Boolean, text: String, fontFamily: FontFamily?) {
     Text(
         modifier = Modifier
             .background(color = Gray600, shape = RoundedCornerShape(4.dp))

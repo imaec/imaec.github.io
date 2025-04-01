@@ -4,6 +4,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -13,11 +18,21 @@ import com.imaec.portfolio.theme.Gray100
 import com.imaec.portfolio.theme.White
 import com.imaec.portfolio.theme.pretendard
 import com.imaec.portfolio.ui.common.Title
+import kotlinx.coroutines.delay
 
 @Composable
 fun HomeAboutMe(isFull: Boolean) {
+    var isFontLoad by remember { mutableStateOf(false) }
+
+    LaunchedEffect(isFontLoad) {
+        if (!isFontLoad) {
+            delay(10)
+            isFontLoad = true
+        }
+    }
+
     Column(verticalArrangement = Arrangement.spacedBy(if (isFull) 60.dp else 20.dp)) {
-        Title(title = "About Me", isFull = isFull)
+        Title(title = "About Me", isFull = isFull, isFontLoad = isFontLoad)
         AboutMeVo.items().forEach {
             Column(verticalArrangement = Arrangement.spacedBy(if (isFull) 20.dp else 8.dp)) {
                 Text(
@@ -26,7 +41,7 @@ fun HomeAboutMe(isFull: Boolean) {
                         color = White,
                         fontSize = if (isFull) 24.sp else 16.sp,
                         fontWeight = FontWeight.SemiBold,
-                        fontFamily = pretendard()
+                        fontFamily = if (isFontLoad) pretendard() else null
                     )
                 )
                 Text(
@@ -35,7 +50,7 @@ fun HomeAboutMe(isFull: Boolean) {
                         color = Gray100,
                         fontSize = if (isFull) 20.sp else 12.sp,
                         fontWeight = FontWeight.Medium,
-                        fontFamily = pretendard(),
+                        fontFamily = if (isFontLoad) pretendard() else null,
                         lineHeight = if (isFull) 32.sp else 20.sp
                     )
                 )

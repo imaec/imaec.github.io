@@ -19,7 +19,7 @@ import com.imaec.portfolio.theme.Gray200
 import com.imaec.portfolio.theme.firaCode
 
 @Composable
-fun Title(title: String, isFull: Boolean) {
+fun Title(title: String, isFull: Boolean, isFontLoad: Boolean) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(if (isFull) 30.dp else 8.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -30,7 +30,7 @@ fun Title(title: String, isFull: Boolean) {
                 color = Gray200,
                 fontSize = if (isFull) 48.sp else 20.sp,
                 fontWeight = FontWeight.Bold,
-                fontFamily = firaCode()
+                fontFamily = if (isFontLoad) firaCode() else null
             )
         )
         Box(

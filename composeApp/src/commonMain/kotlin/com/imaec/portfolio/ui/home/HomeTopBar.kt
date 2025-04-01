@@ -27,16 +27,19 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.imaec.portfolio.getPlatform
 import com.imaec.portfolio.model.ProfileVo
 import com.imaec.portfolio.theme.Gray500
 import com.imaec.portfolio.theme.White
 import com.imaec.portfolio.theme.firaCode
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun HomeTopBar(listState: LazyListState, isFull: Boolean) {
+fun HomeTopBar(
+    listState: LazyListState,
+    isFull: Boolean
+) {
     val coroutineScope = rememberCoroutineScope()
     val menu by remember {
         mutableStateOf(
@@ -51,6 +54,14 @@ fun HomeTopBar(listState: LazyListState, isFull: Boolean) {
     }
     var selectedMenu by remember { mutableStateOf(menu.first()) }
     var isUserScrolling by remember { mutableStateOf(false) }
+    var isFontLoad by remember { mutableStateOf(false) }
+
+    LaunchedEffect(isFontLoad) {
+        if (!isFontLoad) {
+            delay(10)
+            isFontLoad = true
+        }
+    }
 
     LaunchedEffect(listState) {
         snapshotFlow { listState.firstVisibleItemIndex }
@@ -89,6 +100,7 @@ fun HomeTopBar(listState: LazyListState, isFull: Boolean) {
                 menu.forEach {
                     TopBarMenu(
                         isFull = isFull,
+                        isFontLoad = isFontLoad,
                         menu = it,
                         isSelected = it == selectedMenu,
                         onClickMenu = { clickedMenu ->
@@ -121,13 +133,14 @@ fun HomeTopBar(listState: LazyListState, isFull: Boolean) {
                     color = White,
                     fontSize = 32.sp,
                     fontWeight = FontWeight.Bold,
-                    fontFamily = firaCode()
+                    fontFamily = if (isFontLoad) firaCode() else null
                 )
             )
             Row(horizontalArrangement = Arrangement.spacedBy(20.dp)) {
                 menu.forEach {
                     TopBarMenu(
                         isFull = isFull,
+                        isFontLoad = isFontLoad,
                         menu = it,
                         isSelected = it == selectedMenu,
                         onClickMenu = { clickedMenu ->
@@ -148,6 +161,7 @@ fun HomeTopBar(listState: LazyListState, isFull: Boolean) {
 @Composable
 private fun TopBarMenu(
     isFull: Boolean,
+    isFontLoad: Boolean,
     menu: String,
     isSelected: Boolean,
     onClickMenu: (String) -> Unit
@@ -168,7 +182,7 @@ private fun TopBarMenu(
                 color = if (isSelected) White else Gray500,
                 fontSize = if (isFull) 24.sp else 16.sp,
                 fontWeight = FontWeight.Bold,
-                fontFamily = firaCode()
+                fontFamily = if (isFontLoad) firaCode() else null
             )
         )
     }

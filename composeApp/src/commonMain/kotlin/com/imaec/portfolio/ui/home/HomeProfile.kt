@@ -14,6 +14,11 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,6 +32,7 @@ import com.imaec.portfolio.theme.Gray200
 import com.imaec.portfolio.theme.Gray300
 import com.imaec.portfolio.theme.White
 import com.imaec.portfolio.theme.firaCode
+import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.vectorResource
 import portfolio.composeapp.generated.resources.Res
@@ -39,7 +45,15 @@ fun HomeProfile(
     isFull: Boolean,
     onClickLink: (String) -> Unit
 ) {
-    val profile = ProfileVo()
+    val profile by remember { mutableStateOf(ProfileVo()) }
+    var isFontLoad by remember { mutableStateOf(false) }
+
+    LaunchedEffect(isFontLoad) {
+        if (!isFontLoad) {
+            delay(10)
+            isFontLoad = true
+        }
+    }
 
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -106,7 +120,7 @@ fun HomeProfile(
                     color = Gray200,
                     fontSize = if (isFull) 40.sp else 16.sp,
                     fontWeight = FontWeight.Bold,
-                    fontFamily = firaCode()
+                    fontFamily = if (isFontLoad) firaCode() else null
                 )
             )
             Text(
@@ -116,7 +130,7 @@ fun HomeProfile(
                     color = White,
                     fontSize = if (isFull) 60.sp else 24.sp,
                     fontWeight = FontWeight.Bold,
-                    fontFamily = firaCode()
+                    fontFamily = if (isFontLoad) firaCode() else null
                 ),
                 textAlign = TextAlign.Center
             )
@@ -126,7 +140,7 @@ fun HomeProfile(
                     color = White,
                     fontSize = if (isFull) 48.sp else 20.sp,
                     fontWeight = FontWeight.Bold,
-                    fontFamily = firaCode()
+                    fontFamily = if (isFontLoad) firaCode() else null
                 )
             )
             Row(horizontalArrangement = Arrangement.spacedBy(if (isFull) 48.dp else 20.dp)) {
@@ -140,7 +154,7 @@ fun HomeProfile(
                             color = Gray300,
                             fontSize = if (isFull) 86.sp else 30.sp,
                             fontWeight = FontWeight.Bold,
-                            fontFamily = firaCode()
+                            fontFamily = if (isFontLoad) firaCode() else null
                         )
                     )
                     Text(
@@ -149,7 +163,7 @@ fun HomeProfile(
                             color = Gray200,
                             fontSize = if (isFull) 28.sp else 12.sp,
                             fontWeight = FontWeight.Normal,
-                            fontFamily = firaCode()
+                            fontFamily = if (isFontLoad) firaCode() else null
                         )
                     )
                 }
@@ -163,7 +177,7 @@ fun HomeProfile(
                             color = Gray300,
                             fontSize = if (isFull) 86.sp else 30.sp,
                             fontWeight = FontWeight.Bold,
-                            fontFamily = firaCode()
+                            fontFamily = if (isFontLoad) firaCode() else null
                         )
                     )
                     Text(
@@ -172,7 +186,7 @@ fun HomeProfile(
                             color = Gray200,
                             fontSize = if (isFull) 28.sp else 12.sp,
                             fontWeight = FontWeight.Normal,
-                            fontFamily = firaCode()
+                            fontFamily = if (isFontLoad) firaCode() else null
                         )
                     )
                 }

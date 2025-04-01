@@ -17,6 +17,11 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -30,11 +35,21 @@ import com.imaec.portfolio.theme.firaCode
 import com.imaec.portfolio.theme.pretendard
 import com.imaec.portfolio.ui.common.Tag
 import com.imaec.portfolio.ui.common.Title
+import kotlinx.coroutines.delay
 
 @Composable
 fun HomeCareer(isFull: Boolean) {
+    var isFontLoad by remember { mutableStateOf(false) }
+
+    LaunchedEffect(isFontLoad) {
+        if (!isFontLoad) {
+            delay(10)
+            isFontLoad = true
+        }
+    }
+
     Column(verticalArrangement = Arrangement.spacedBy(if (isFull) 60.dp else 16.dp)) {
-        Title(title = "Career", isFull = isFull)
+        Title(title = "Career", isFull = isFull, isFontLoad = isFontLoad)
         LazyVerticalGrid(
             modifier = Modifier
                 .widthIn(
@@ -50,7 +65,7 @@ fun HomeCareer(isFull: Boolean) {
             verticalArrangement = Arrangement.spacedBy(if (isFull) 40.dp else 16.dp)
         ) {
             items(CareerVo.items()) {
-                CareerItem(career = it, isFull = isFull)
+                CareerItem(career = it, isFull = isFull, isFontLoad = isFontLoad)
             }
         }
     }
@@ -58,7 +73,7 @@ fun HomeCareer(isFull: Boolean) {
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun CareerItem(career: CareerVo, isFull: Boolean) {
+private fun CareerItem(career: CareerVo, isFull: Boolean, isFontLoad: Boolean) {
     Column(
         modifier = Modifier
             .width(if (isFull) 700.dp else 300.dp)
@@ -75,7 +90,7 @@ private fun CareerItem(career: CareerVo, isFull: Boolean) {
                         color = Gray600,
                         fontSize = if (isFull) 12.sp else 6.sp,
                         fontWeight = FontWeight.Medium,
-                        fontFamily = firaCode()
+                        fontFamily = if (isFontLoad) firaCode() else null
                     )
                 )
                 Text(
@@ -84,14 +99,26 @@ private fun CareerItem(career: CareerVo, isFull: Boolean) {
                         color = Gray100,
                         fontSize = if (isFull) 24.sp else 12.sp,
                         fontWeight = FontWeight.Bold,
-                        fontFamily = pretendard()
+                        fontFamily = if (isFontLoad) pretendard() else null
                     )
                 )
                 Row(horizontalArrangement = Arrangement.spacedBy(if (isFull) 6.dp else 4.dp)) {
-                    Tag(isFull = isFull, text = career.team, fontFamily = pretendard())
-                    Tag(isFull = isFull, text = career.position, fontFamily = pretendard())
+                    Tag(
+                        isFull = isFull,
+                        text = career.team,
+                        fontFamily = if (isFontLoad) pretendard() else null
+                    )
+                    Tag(
+                        isFull = isFull,
+                        text = career.position,
+                        fontFamily = if (isFontLoad) pretendard() else null
+                    )
                     if (career.job.isNotEmpty()) {
-                        Tag(isFull = isFull, text = career.job, fontFamily = pretendard())
+                        Tag(
+                            isFull = isFull,
+                            text = career.job,
+                            fontFamily = if (isFontLoad) pretendard() else null
+                        )
                     }
                 }
             }
@@ -103,7 +130,7 @@ private fun CareerItem(career: CareerVo, isFull: Boolean) {
                             color = Gray100,
                             fontSize = if (isFull) 18.sp else 10.sp,
                             fontWeight = FontWeight.Medium,
-                            fontFamily = pretendard(),
+                            fontFamily = if (isFontLoad) pretendard() else null,
                             lineHeight = if (isFull) 28.sp else 16.sp
                         )
                     )
@@ -117,7 +144,11 @@ private fun CareerItem(career: CareerVo, isFull: Boolean) {
                     verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     skill.forEach {
-                        Tag(isFull = isFull, text = it, fontFamily = firaCode())
+                        Tag(
+                            isFull = isFull,
+                            text = it,
+                            fontFamily = if (isFontLoad) firaCode() else null
+                        )
                     }
                 }
             }

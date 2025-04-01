@@ -23,7 +23,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -44,6 +49,7 @@ import com.imaec.portfolio.theme.firaCode
 import com.imaec.portfolio.theme.pretendard
 import com.imaec.portfolio.ui.common.Tag
 import com.imaec.portfolio.ui.common.Title
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.vectorResource
@@ -53,8 +59,17 @@ import portfolio.composeapp.generated.resources.ic_arrow_right
 
 @Composable
 fun HomeProjects(isFull: Boolean, onShowDetail: (ProjectDetailVo) -> Unit) {
+    var isFontLoad by remember { mutableStateOf(false) }
+
+    LaunchedEffect(isFontLoad) {
+        if (!isFontLoad) {
+            delay(10)
+            isFontLoad = true
+        }
+    }
+
     Column(verticalArrangement = Arrangement.spacedBy(if (isFull) 60.dp else 20.dp)) {
-        Title(title = "Projects", isFull = isFull)
+        Title(title = "Projects", isFull = isFull, isFontLoad = isFontLoad)
         Column(verticalArrangement = Arrangement.spacedBy(if (isFull) 10.dp else 8.dp)) {
             Text(
                 text = "Company Projects",
@@ -62,10 +77,14 @@ fun HomeProjects(isFull: Boolean, onShowDetail: (ProjectDetailVo) -> Unit) {
                     color = Gray200,
                     fontSize = if (isFull) 36.sp else 16.sp,
                     fontWeight = FontWeight.SemiBold,
-                    fontFamily = firaCode()
+                    fontFamily = if (isFontLoad) firaCode() else null
                 )
             )
-            CompanyProjects(isFull = isFull, onShowDetail = onShowDetail)
+            CompanyProjects(
+                isFull = isFull,
+                isFontLoad = isFontLoad,
+                onShowDetail = onShowDetail
+            )
         }
         Column(verticalArrangement = Arrangement.spacedBy(if (isFull) 10.dp else 8.dp)) {
             Text(
@@ -74,16 +93,24 @@ fun HomeProjects(isFull: Boolean, onShowDetail: (ProjectDetailVo) -> Unit) {
                     color = Gray200,
                     fontSize = if (isFull) 36.sp else 16.sp,
                     fontWeight = FontWeight.SemiBold,
-                    fontFamily = firaCode()
+                    fontFamily = if (isFontLoad) firaCode() else null
                 )
             )
-            TeamProjects(isFull = isFull, onShowDetail = onShowDetail)
+            TeamProjects(
+                isFull = isFull,
+                isFontLoad = isFontLoad,
+                onShowDetail = onShowDetail
+            )
         }
     }
 }
 
 @Composable
-private fun CompanyProjects(isFull: Boolean, onShowDetail: (ProjectDetailVo) -> Unit) {
+private fun CompanyProjects(
+    isFull: Boolean,
+    isFontLoad: Boolean,
+    onShowDetail: (ProjectDetailVo) -> Unit
+) {
     Column(
         modifier = Modifier
             .width(1440.dp)
@@ -96,6 +123,7 @@ private fun CompanyProjects(isFull: Boolean, onShowDetail: (ProjectDetailVo) -> 
     ) {
         ProjectGroup(
             isFull = isFull,
+            isFontLoad = isFontLoad,
             title = "브랜드엑스피트니스",
             projects = ProjectVo.brandxfitnessItems(),
             projectDetails = ProjectDetailVo.brandxfitnessItems(),
@@ -103,6 +131,7 @@ private fun CompanyProjects(isFull: Boolean, onShowDetail: (ProjectDetailVo) -> 
         )
         ProjectGroup(
             isFull = isFull,
+            isFontLoad = isFontLoad,
             title = "라이픽",
             projects = ProjectVo.lificItems(),
             projectDetails = ProjectDetailVo.lificItems(),
@@ -110,6 +139,7 @@ private fun CompanyProjects(isFull: Boolean, onShowDetail: (ProjectDetailVo) -> 
         )
         ProjectGroup(
             isFull = isFull,
+            isFontLoad = isFontLoad,
             title = "티모넷",
             projects = ProjectVo.tmonetItems(),
             projectDetails = ProjectDetailVo.tmonetItems(),
@@ -117,6 +147,7 @@ private fun CompanyProjects(isFull: Boolean, onShowDetail: (ProjectDetailVo) -> 
         )
         ProjectGroup(
             isFull = isFull,
+            isFontLoad = isFontLoad,
             title = "예스폼",
             projects = ProjectVo.yesformItems(),
             projectDetails = ProjectDetailVo.yesformItems(),
@@ -126,7 +157,11 @@ private fun CompanyProjects(isFull: Boolean, onShowDetail: (ProjectDetailVo) -> 
 }
 
 @Composable
-private fun TeamProjects(isFull: Boolean, onShowDetail: (ProjectDetailVo) -> Unit) {
+private fun TeamProjects(
+    isFull: Boolean,
+    isFontLoad: Boolean,
+    onShowDetail: (ProjectDetailVo) -> Unit
+) {
     Column(
         modifier = Modifier
             .width(1440.dp)
@@ -139,6 +174,7 @@ private fun TeamProjects(isFull: Boolean, onShowDetail: (ProjectDetailVo) -> Uni
     ) {
         ProjectGroup(
             isFull = isFull,
+            isFontLoad = isFontLoad,
             title = "아파트임당",
             projects = ProjectVo.imdangItems(),
             projectDetails = ProjectDetailVo.imdangItems(),
@@ -150,6 +186,7 @@ private fun TeamProjects(isFull: Boolean, onShowDetail: (ProjectDetailVo) -> Uni
 @Composable
 private fun ProjectGroup(
     isFull: Boolean,
+    isFontLoad: Boolean,
     title: String,
     projects: List<ProjectVo>,
     projectDetails: List<ProjectDetailVo>,
@@ -166,7 +203,7 @@ private fun ProjectGroup(
                 color = White,
                 fontSize = if (isFull) 30.sp else 16.sp,
                 fontWeight = FontWeight.SemiBold,
-                fontFamily = pretendard()
+                fontFamily = if (isFontLoad) pretendard() else null
             )
         )
         Row(
@@ -204,6 +241,7 @@ private fun ProjectGroup(
                     ProjectItem(
                         project = item,
                         isFull = isFull,
+                        isFontLoad = isFontLoad,
                         onShowDetail = {
                             onShowDetail(projectDetails[index])
                         }
@@ -237,6 +275,7 @@ private fun ProjectGroup(
 private fun ProjectItem(
     project: ProjectVo,
     isFull: Boolean,
+    isFontLoad: Boolean,
     onShowDetail: () -> Unit
 ) {
     Column(
@@ -282,7 +321,7 @@ private fun ProjectItem(
                     color = Gray900,
                     fontSize = if (isFull) 16.sp else 10.sp,
                     fontWeight = FontWeight.SemiBold,
-                    fontFamily = pretendard()
+                    fontFamily = if (isFontLoad) pretendard() else null
                 )
             )
             FlowRow(
@@ -290,7 +329,11 @@ private fun ProjectItem(
                 verticalArrangement = Arrangement.spacedBy(if (isFull) 6.dp else 2.dp)
             ) {
                 project.tags.forEach { tag ->
-                    Tag(isFull = isFull, text = tag, fontFamily = firaCode())
+                    Tag(
+                        isFull = isFull,
+                        text = tag,
+                        fontFamily = if (isFontLoad) firaCode() else null
+                    )
                 }
             }
         }

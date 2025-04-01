@@ -1,8 +1,14 @@
 package com.imaec.portfolio.theme
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.Font
 import portfolio.composeapp.generated.resources.Res
 import portfolio.composeapp.generated.resources.firacode_bold
@@ -17,7 +23,7 @@ import portfolio.composeapp.generated.resources.pretendard_regular
 import portfolio.composeapp.generated.resources.pretendard_semibold
 
 @Composable
-fun firaCode() = FontFamily(
+fun firaCode(): FontFamily = FontFamily(
     Font(Res.font.firacode_bold, FontWeight.Bold),
     Font(Res.font.firacode_semibold, FontWeight.SemiBold),
     Font(Res.font.firacode_medium, FontWeight.Medium),
@@ -26,7 +32,7 @@ fun firaCode() = FontFamily(
 )
 
 @Composable
-fun pretendard() = FontFamily(
+fun pretendard(): FontFamily = FontFamily(
     Font(Res.font.pretendard_bold, FontWeight.Bold),
     Font(Res.font.pretendard_semibold, FontWeight.SemiBold),
     Font(Res.font.pretendard_medium, FontWeight.Medium),
