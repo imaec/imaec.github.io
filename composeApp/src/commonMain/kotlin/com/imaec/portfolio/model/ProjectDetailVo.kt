@@ -394,7 +394,7 @@ data class ProjectDetailVo(
         fun imdangItems(): List<ProjectDetailVo> = listOf(
             ProjectDetailVo(
                 cover = Res.drawable.img_cover_imdang,
-                title = "아파트임당 안드로이드 앱",
+                title = "아파트임당\n안드로이드 앱",
                 projectSummary = listOf(
                     " • 아파트 임장 후기 공유 서비스 아파트임장 안드로이드 앱 개발",
                     " • 단순 SNS 게시글 공유 방식이 아닌 회원간 게시글 교환 시스템",

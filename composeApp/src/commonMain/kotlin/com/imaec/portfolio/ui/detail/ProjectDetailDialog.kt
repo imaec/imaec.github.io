@@ -40,6 +40,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.imaec.portfolio.model.ProjectDetailVo
+import com.imaec.portfolio.model.ScreenType
+import com.imaec.portfolio.model.isWeb
 import com.imaec.portfolio.theme.Gray100
 import com.imaec.portfolio.theme.Gray600
 import com.imaec.portfolio.theme.Gray700
@@ -61,6 +63,7 @@ import portfolio.composeapp.generated.resources.ic_trouble_shooting
 
 @Composable
 fun ProjectDetailDialog(
+    screenType: ScreenType,
     projectDetail: ProjectDetailVo,
     onClickLink: (String) -> Unit,
     onDismiss: () -> Unit
@@ -79,7 +82,10 @@ fun ProjectDetailDialog(
     ) {
         Box(
             modifier = Modifier
-                .padding(horizontal = 120.dp, vertical = 80.dp)
+                .padding(
+                    horizontal = if (screenType.isWeb()) 120.dp else 45.dp,
+                    vertical = if (screenType.isWeb()) 80.dp else 30.dp
+                )
                 .fillMaxSize()
                 .clip(RoundedCornerShape(16.dp))
                 .background(White)
@@ -93,7 +99,9 @@ fun ProjectDetailDialog(
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                contentPadding = PaddingValues(bottom = 200.dp)
+                contentPadding = PaddingValues(
+                    bottom = if (screenType.isWeb()) 200.dp else 48.dp
+                )
             ) {
                 item {
                     var topHeight by remember { mutableStateOf(0) }
@@ -103,7 +111,7 @@ fun ProjectDetailDialog(
                                 if (projectDetail.cover != null) {
                                     (topHeight * 0.8).toInt().toDp()
                                 } else {
-                                    topHeight.toDp() - 34.dp
+                                    topHeight.toDp() - (if (screenType.isWeb()) 34.dp else 20.dp)
                                 }
                             }
                         }
@@ -127,11 +135,13 @@ fun ProjectDetailDialog(
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text(
-                                modifier = Modifier.padding(top = 228.dp),
+                                modifier = Modifier.padding(
+                                    top = if (screenType.isWeb()) 228.dp else 104.dp
+                                ),
                                 text = projectDetail.title,
                                 style = TextStyle(
                                     color = White,
-                                    fontSize = 48.sp,
+                                    fontSize = if (screenType.isWeb()) 48.sp else 24.sp,
                                     fontWeight = FontWeight.Bold,
                                     fontFamily = pretendard()
                                 ),
@@ -139,8 +149,12 @@ fun ProjectDetailDialog(
                             )
                             if (projectDetail.links.isNotEmpty()) {
                                 Row(
-                                    modifier = Modifier.padding(vertical = 36.dp),
-                                    horizontalArrangement = Arrangement.spacedBy(36.dp)
+                                    modifier = Modifier.padding(
+                                        vertical = if (screenType.isWeb()) 36.dp else 20.dp
+                                    ),
+                                    horizontalArrangement = Arrangement.spacedBy(
+                                        if (screenType.isWeb()) 36.dp else 20.dp
+                                    )
                                 ) {
                                     projectDetail.links.forEach {
                                         Column(
@@ -151,7 +165,9 @@ fun ProjectDetailDialog(
                                             horizontalAlignment = Alignment.CenterHorizontally
                                         ) {
                                             Icon(
-                                                modifier = Modifier.size(40.dp),
+                                                modifier = Modifier.size(
+                                                    if (screenType.isWeb()) 40.dp else 20.dp
+                                                ),
                                                 imageVector = vectorResource(it.first),
                                                 tint = Gray100,
                                                 contentDescription = null
@@ -160,7 +176,11 @@ fun ProjectDetailDialog(
                                                 text = it.second,
                                                 style = TextStyle(
                                                     color = Gray100,
-                                                    fontSize = 14.sp,
+                                                    fontSize = if (screenType.isWeb()) {
+                                                        14.sp
+                                                    } else {
+                                                        8.sp
+                                                    },
                                                     fontWeight = FontWeight.Medium,
                                                     fontFamily = firaCode()
                                                 ),
@@ -170,22 +190,30 @@ fun ProjectDetailDialog(
                                     }
                                 }
                             } else {
-                                Box(modifier = Modifier.height(100.dp))
+                                Box(
+                                    modifier = Modifier.height(
+                                        if (screenType.isWeb()) 100.dp else 40.dp
+                                    )
+                                )
                             }
                             if (projectDetail.cover != null) {
                                 Image(
-                                    modifier = Modifier.width(800.dp),
+                                    modifier = Modifier.width(
+                                        if (screenType.isWeb()) 800.dp else 240.dp
+                                    ),
                                     painter = painterResource(projectDetail.cover),
                                     contentScale = ContentScale.FillWidth,
                                     contentDescription = null
                                 )
                             }
                             Text(
-                                modifier = Modifier.padding(top = 10.dp),
+                                modifier = Modifier.padding(
+                                    top = if (screenType.isWeb()) 10.dp else 4.dp
+                                ),
                                 text = "2024. 08. 02 ~ 2024. 10. 04",
                                 style = TextStyle(
                                     color = Gray900,
-                                    fontSize = 16.sp,
+                                    fontSize = if (screenType.isWeb()) 16.sp else 10.sp,
                                     fontWeight = FontWeight.Bold,
                                     fontFamily = firaCode()
                                 )
@@ -195,33 +223,43 @@ fun ProjectDetailDialog(
                 }
                 item {
                     Column(
-                        modifier = Modifier.padding(horizontal = 300.dp, vertical = 100.dp),
-                        verticalArrangement = Arrangement.spacedBy(80.dp)
+                        modifier = Modifier.padding(
+                            horizontal = if (screenType.isWeb()) 300.dp else 40.dp,
+                            vertical = if (screenType.isWeb()) 100.dp else 40.dp
+                        ),
+                        verticalArrangement = Arrangement.spacedBy(
+                            if (screenType.isWeb()) 80.dp else 40.dp
+                        )
                     ) {
                         Content(
+                            screenType = screenType,
                             icon = Res.drawable.ic_summary,
                             title = "Project Summary",
                             content = projectDetail.projectSummary
                         )
                         Content(
+                            screenType = screenType,
                             icon = Res.drawable.ic_responsibility,
                             title = "Responsibilities",
                             content = projectDetail.responsibilities
                         )
                         if (projectDetail.troubleShootings.isNotEmpty()) {
                             Content(
+                                screenType = screenType,
                                 icon = Res.drawable.ic_trouble_shooting,
                                 title = "Trouble Shooting",
                                 content = projectDetail.troubleShootings
                             )
                         }
                         Content(
+                            screenType = screenType,
                             icon = Res.drawable.ic_tech_skill,
                             title = "Tech Skills",
                             content = projectDetail.techSkills
                         )
                         if (projectDetail.notes.isNotEmpty()) {
                             Content(
+                                screenType = screenType,
                                 icon = Res.drawable.ic_note,
                                 title = "Notes",
                                 content = projectDetail.notes
@@ -232,8 +270,8 @@ fun ProjectDetailDialog(
             }
             Icon(
                 modifier = Modifier
-                    .padding(40.dp)
-                    .size(48.dp)
+                    .padding(if (screenType.isWeb()) 40.dp else 20.dp)
+                    .size(if (screenType.isWeb()) 48.dp else 24.dp)
                     .clip(CircleShape)
                     .clickable { onDismiss() }
                     .align(Alignment.TopEnd),
@@ -247,17 +285,26 @@ fun ProjectDetailDialog(
 
 @Composable
 private fun Content(
+    screenType: ScreenType,
     icon: DrawableResource,
     title: String,
     content: List<String>
 ) {
-    Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(
+            if (screenType.isWeb()) 20.dp else 12.dp
+        )
+    ) {
         Row(
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            horizontalArrangement = Arrangement.spacedBy(
+                if (screenType.isWeb()) 12.dp else 8.dp
+            ),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                modifier = Modifier.size(24.dp),
+                modifier = Modifier.size(
+                    if (screenType.isWeb()) 24.dp else 14.dp
+                ),
                 painter = painterResource(icon),
                 tint = Color.Unspecified,
                 contentDescription = null
@@ -266,7 +313,7 @@ private fun Content(
                 text = title,
                 style = TextStyle(
                     color = Gray900,
-                    fontSize = 24.sp,
+                    fontSize = if (screenType.isWeb()) 24.sp else 14.sp,
                     fontWeight = FontWeight.Bold,
                     fontFamily = firaCode()
                 )
@@ -276,10 +323,10 @@ private fun Content(
             text = content.joinToString("\n"),
             style = TextStyle(
                 color = Gray600,
-                fontSize = 20.sp,
+                fontSize = if (screenType.isWeb()) 20.sp else 12.sp,
                 fontWeight = FontWeight.Medium,
                 fontFamily = pretendard(),
-                lineHeight = 32.sp
+                lineHeight = if (screenType.isWeb()) 32.sp else 20.sp
             )
         )
     }

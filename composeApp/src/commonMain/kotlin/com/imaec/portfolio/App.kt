@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.platform.LocalDensity
 import com.imaec.portfolio.model.ProjectDetailVo
 import com.imaec.portfolio.model.ScreenType
 import com.imaec.portfolio.ui.home.HomeScreen
@@ -17,18 +18,19 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun App(
     onClickLink: (String) -> Unit = {},
     onShowDetail: (ProjectDetailVo) -> Unit = {},
-    onScreenWidthChanged: (Int) -> Unit = {},
+    onChangeScreenType: (ScreenType) -> Unit = {},
 ) {
-    var screenWidth by remember { mutableStateOf(0) }
+    val density = LocalDensity.current
+    var screenType by remember { mutableStateOf(ScreenType.WEB) }
 
-    LaunchedEffect(screenWidth) {
-        onScreenWidthChanged(screenWidth)
+    LaunchedEffect(screenType) {
+        onChangeScreenType(screenType)
     }
 
     Layout(
         content = {
             HomeScreen(
-                screenType = ScreenType.fromScreenWidth(screenWidth),
+                screenType = screenType,
                 onClickLink = onClickLink,
                 onShowDetail = onShowDetail
             )
@@ -37,7 +39,8 @@ fun App(
             val width = constraints.maxWidth
             val height = constraints.maxHeight
 
-            screenWidth = width
+            screenType = ScreenType.fromScreenWidth(with(density) { width.toDp() }.value.toInt())
+            println(screenType)
 
             val placeables = measurables.map { measurable ->
                 measurable.measure(constraints)

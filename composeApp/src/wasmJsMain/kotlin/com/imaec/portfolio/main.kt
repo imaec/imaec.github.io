@@ -9,6 +9,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.window.ComposeViewport
 import com.imaec.portfolio.model.ProjectDetailVo
+import com.imaec.portfolio.model.ScreenType
 import com.imaec.portfolio.ui.detail.ProjectDetailDialog
 import kotlinx.browser.document
 import kotlinx.browser.window
@@ -18,6 +19,7 @@ import org.w3c.dom.events.KeyboardEvent
 fun main() {
     ComposeViewport(document.body!!) {
         var projectDetail: ProjectDetailVo? by remember { mutableStateOf(null) }
+        var screenType by remember { mutableStateOf(ScreenType.WEB) }
 
         LaunchedEffect(Unit) {
             addEscKeyListener {
@@ -33,12 +35,13 @@ fun main() {
                 onShowDetail = {
                     projectDetail = it
                 },
-                onScreenWidthChanged = {
-
+                onChangeScreenType = {
+                    screenType = it
                 }
             )
             if (projectDetail != null) {
                 ProjectDetailDialog(
+                    screenType = screenType,
                     projectDetail = projectDetail!!,
                     onClickLink = {
                         window.open(it)
