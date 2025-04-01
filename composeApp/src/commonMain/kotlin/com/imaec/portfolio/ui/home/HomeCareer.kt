@@ -56,7 +56,7 @@ import com.imaec.portfolio.model.ScreenType
 import com.imaec.portfolio.model.isWeb
 import com.imaec.portfolio.theme.Gray100
 import com.imaec.portfolio.theme.Gray200
-import com.imaec.portfolio.theme.Gray600
+import com.imaec.portfolio.theme.Gray400
 import com.imaec.portfolio.theme.Gray800
 import com.imaec.portfolio.theme.White
 import com.imaec.portfolio.theme.firaCode
@@ -180,7 +180,10 @@ private fun CareerItemFront(
             modifier = Modifier
                 .then(if (screenType.isWeb()) Modifier.width(700.dp) else Modifier.fillMaxWidth())
                 .height(if (screenType.isWeb()) 500.dp else 280.dp)
-                .background(color = Gray800, shape = RoundedCornerShape(8.dp))
+                .background(
+                    color = Gray800,
+                    shape = RoundedCornerShape(if (screenType.isWeb()) 16.dp else 8.dp)
+                )
                 .padding(if (screenType.isWeb()) 32.dp else 16.dp)
                 .pointerInput(Unit) {
                     awaitPointerEventScope {
@@ -205,8 +208,8 @@ private fun CareerItemFront(
                     Text(
                         text = career.period,
                         style = TextStyle(
-                            color = Gray600,
-                            fontSize = if (screenType.isWeb()) 12.sp else 6.sp,
+                            color = Gray400,
+                            fontSize = if (screenType.isWeb()) 14.sp else 8.sp,
                             fontWeight = FontWeight.Medium,
                             fontFamily = if (isFontLoad) firaCode() else null
                         )
@@ -311,7 +314,10 @@ private fun CareerItemBack(
             modifier = Modifier
                 .then(if (screenType.isWeb()) Modifier.width(700.dp) else Modifier.fillMaxWidth())
                 .height(if (screenType.isWeb()) 500.dp else 280.dp)
-                .background(color = Gray800, shape = RoundedCornerShape(8.dp))
+                .background(
+                    color = Gray800,
+                    shape = RoundedCornerShape(if (screenType.isWeb()) 16.dp else 8.dp)
+                )
                 .padding(if (screenType.isWeb()) 32.dp else 16.dp)
                 .graphicsLayer { this.rotationX = 180f } // 반대쪽 UI는 180도 회전
                 .pointerInput(Unit) {
@@ -326,7 +332,7 @@ private fun CareerItemBack(
                         }
                     }
                 },
-            verticalArrangement = Arrangement.spacedBy(if (screenType.isWeb()) 20.dp else 16.dp)
+            verticalArrangement = Arrangement.spacedBy(if (screenType.isWeb()) 16.dp else 8.dp)
         ) {
             Text(
                 text = career.company,
@@ -345,7 +351,7 @@ private fun CareerItemBack(
             ) {
                 Icon(
                     modifier = Modifier.size(
-                        if (screenType.isWeb()) 20.dp else 10.dp
+                        if (screenType.isWeb()) 20.dp else 11.dp
                     ),
                     painter = painterResource(Res.drawable.ic_responsibility),
                     tint = Color.Unspecified,
@@ -355,7 +361,7 @@ private fun CareerItemBack(
                     text = "경력 소개",
                     style = TextStyle(
                         color = Gray200,
-                        fontSize = if (screenType.isWeb()) 20.sp else 10.sp,
+                        fontSize = if (screenType.isWeb()) 20.sp else 11.sp,
                         fontWeight = FontWeight.SemiBold,
                         fontFamily = if (isFontLoad) pretendard() else null
                     )
