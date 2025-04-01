@@ -38,6 +38,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.PointerIcon
+import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
@@ -201,9 +203,11 @@ private fun Dialog(
                             ) {
                                 projectDetail.links.forEach {
                                     Column(
-                                        modifier = Modifier.clickable {
-                                            onClickLink(it.third)
-                                        },
+                                        modifier = Modifier
+                                            .pointerHoverIcon(PointerIcon.Hand)
+                                            .clickable {
+                                                onClickLink(it.third)
+                                            },
                                         verticalArrangement = Arrangement.spacedBy(4.dp),
                                         horizontalAlignment = Alignment.CenterHorizontally
                                     ) {
@@ -319,6 +323,7 @@ private fun Dialog(
                 .padding(if (screenType.isWeb()) 40.dp else 20.dp)
                 .size(if (screenType.isWeb()) 48.dp else 24.dp)
                 .clip(CircleShape)
+                .pointerHoverIcon(PointerIcon.Hand)
                 .clickable { onDismiss() }
                 .align(Alignment.TopEnd),
             imageVector = vectorResource(Res.drawable.ic_close_circle),

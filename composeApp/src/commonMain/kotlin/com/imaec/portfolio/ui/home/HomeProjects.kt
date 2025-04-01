@@ -31,6 +31,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.pointer.PointerIcon
+import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -57,6 +59,7 @@ import org.jetbrains.compose.resources.vectorResource
 import portfolio.composeapp.generated.resources.Res
 import portfolio.composeapp.generated.resources.ic_arrow_left
 import portfolio.composeapp.generated.resources.ic_arrow_right
+import portfolio.composeapp.generated.resources.ic_touch
 
 @Composable
 fun HomeProjects(
@@ -233,6 +236,7 @@ private fun ProjectGroup(
                 modifier = Modifier
                     .size(if (screenType.isWeb()) 56.dp else 24.dp)
                     .clip(CircleShape)
+                    .pointerHoverIcon(PointerIcon.Hand)
                     .clickable {
                         coroutineScope.launch {
                             val targetIndex = if (listState.firstVisibleItemIndex > 0) {
@@ -272,6 +276,7 @@ private fun ProjectGroup(
                 modifier = Modifier
                     .size(if (screenType.isWeb()) 56.dp else 24.dp)
                     .clip(CircleShape)
+                    .pointerHoverIcon(PointerIcon.Hand)
                     .clickable {
                         coroutineScope.launch {
                             val targetIndex = if (
@@ -309,6 +314,7 @@ private fun ProjectItem(
                 shape = RoundedCornerShape(if (screenType.isWeb()) 12.dp else 8.dp)
             )
             .clip(RoundedCornerShape(if (screenType.isWeb()) 12.dp else 8.dp))
+            .pointerHoverIcon(PointerIcon.Hand)
             .clickable { onShowDetail() }
     ) {
         Image(

@@ -22,6 +22,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.pointer.PointerIcon
+import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -83,6 +85,7 @@ fun HomeProfile(
                     modifier = Modifier
                         .size(if (screenType.isWeb()) 64.dp else 24.dp)
                         .clip(CircleShape)
+                        .pointerHoverIcon(PointerIcon.Hand)
                         .clickable {
                             onClickLink(profile.githubUrl)
                         }
@@ -95,6 +98,7 @@ fun HomeProfile(
                     modifier = Modifier
                         .size(if (screenType.isWeb()) 64.dp else 24.dp)
                         .clip(CircleShape)
+                        .pointerHoverIcon(PointerIcon.Hand)
                         .clickable {
                             onClickLink(profile.notionUrl)
                         }
@@ -107,6 +111,7 @@ fun HomeProfile(
                     modifier = Modifier
                         .size(if (screenType.isWeb()) 64.dp else 24.dp)
                         .clip(CircleShape)
+                        .pointerHoverIcon(PointerIcon.Hand)
                         .clickable {
                             onClickLink(profile.mailUrl)
                         }

@@ -23,6 +23,8 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.pointer.PointerIcon
+import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -171,6 +173,7 @@ private fun TopBarMenu(
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(8.dp))
+            .pointerHoverIcon(PointerIcon.Hand)
             .clickable { onClickMenu(menu) }
             .padding(
                 horizontal = if (screenType.isWeb()) 16.dp else 8.dp,

@@ -42,6 +42,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.PointerEventType
+import androidx.compose.ui.input.pointer.PointerIcon
+import androidx.compose.ui.input.pointer.pointerHoverIcon
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -139,6 +143,7 @@ private fun CareerItem(
                 this.rotationX = rotationX
                 cameraDistance = 16 * density
             }
+            .pointerHoverIcon(PointerIcon.Hand)
             .clickable(
                 enabled = true,
                 indication = null,
@@ -168,13 +173,27 @@ private fun CareerItemFront(
     career: CareerVo,
     isFontLoad: Boolean
 ) {
+    var isVisibleRotate by remember { mutableStateOf(false) }
+
     Box {
         Column(
             modifier = Modifier
                 .then(if (screenType.isWeb()) Modifier.width(700.dp) else Modifier.fillMaxWidth())
                 .height(if (screenType.isWeb()) 500.dp else 280.dp)
                 .background(color = Gray800, shape = RoundedCornerShape(8.dp))
-                .padding(if (screenType.isWeb()) 32.dp else 16.dp),
+                .padding(if (screenType.isWeb()) 32.dp else 16.dp)
+                .pointerInput(Unit) {
+                    awaitPointerEventScope {
+                        while (true) {
+                            val event = awaitPointerEvent()
+                            when (event.type) {
+                                PointerEventType.Enter -> isVisibleRotate = true
+                                PointerEventType.Exit -> isVisibleRotate = false
+                                PointerEventType.Press -> {}
+                            }
+                        }
+                    }
+                },
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             Column(
@@ -261,15 +280,17 @@ private fun CareerItemFront(
                 }
             }
         }
-        Icon(
-            modifier = Modifier
-                .padding(if (screenType.isWeb()) 32.dp else 16.dp)
-                .size(if (screenType.isWeb()) 36.dp else 18.dp)
-                .align(Alignment.TopEnd),
-            imageVector = vectorResource(Res.drawable.ic_refresh),
-            tint = White,
-            contentDescription = null
-        )
+        if (isVisibleRotate) {
+            Icon(
+                modifier = Modifier
+                    .padding(if (screenType.isWeb()) 32.dp else 16.dp)
+                    .size(if (screenType.isWeb()) 36.dp else 18.dp)
+                    .align(Alignment.TopEnd),
+                imageVector = vectorResource(Res.drawable.ic_refresh),
+                tint = White,
+                contentDescription = null
+            )
+        }
     }
 }
 
@@ -283,6 +304,7 @@ private fun CareerItemBack(
     val coroutineScope = rememberCoroutineScope()
     val listState = rememberLazyListState()
     val scrollingHeight by remember { mutableStateOf(with(density) { 80.dp.toPx() }) }
+    var isVisibleRotate by remember { mutableStateOf(false) }
 
     Box {
         Column(
@@ -291,7 +313,19 @@ private fun CareerItemBack(
                 .height(if (screenType.isWeb()) 500.dp else 280.dp)
                 .background(color = Gray800, shape = RoundedCornerShape(8.dp))
                 .padding(if (screenType.isWeb()) 32.dp else 16.dp)
-                .graphicsLayer { this.rotationX = 180f }, // 반대쪽 UI는 180도 회전,
+                .graphicsLayer { this.rotationX = 180f } // 반대쪽 UI는 180도 회전
+                .pointerInput(Unit) {
+                    awaitPointerEventScope {
+                        while (true) {
+                            val event = awaitPointerEvent()
+                            when (event.type) {
+                                PointerEventType.Enter -> isVisibleRotate = true
+                                PointerEventType.Exit -> isVisibleRotate = false
+                                PointerEventType.Press -> {}
+                            }
+                        }
+                    }
+                },
             verticalArrangement = Arrangement.spacedBy(if (screenType.isWeb()) 20.dp else 16.dp)
         ) {
             Text(
@@ -348,6 +382,7 @@ private fun CareerItemBack(
                             .size(if (screenType.isWeb()) 48.dp else 32.dp)
                             .align(Alignment.TopCenter)
                             .clip(CircleShape)
+                            .pointerHoverIcon(PointerIcon.Hand)
                             .clickable {
                                 coroutineScope.launch {
                                     listState.animateScrollBy(
@@ -368,6 +403,7 @@ private fun CareerItemBack(
                             .size(if (screenType.isWeb()) 48.dp else 32.dp)
                             .align(Alignment.BottomCenter)
                             .clip(CircleShape)
+                            .pointerHoverIcon(PointerIcon.Hand)
                             .clickable {
                                 coroutineScope.launch {
                                     listState.animateScrollBy(scrollingHeight, tween(500))
@@ -381,15 +417,17 @@ private fun CareerItemBack(
                 }
             }
         }
-        Icon(
-            modifier = Modifier
-                .padding(if (screenType.isWeb()) 32.dp else 16.dp)
-                .size(if (screenType.isWeb()) 36.dp else 18.dp)
-                .align(Alignment.BottomEnd)
-                .graphicsLayer { this.rotationX = 180f }, // 반대쪽 UI는 180도 회전,,
-            imageVector = vectorResource(Res.drawable.ic_refresh),
-            tint = White,
-            contentDescription = null
-        )
+        if (isVisibleRotate) {
+            Icon(
+                modifier = Modifier
+                    .padding(if (screenType.isWeb()) 32.dp else 16.dp)
+                    .size(if (screenType.isWeb()) 36.dp else 18.dp)
+                    .align(Alignment.BottomEnd)
+                    .graphicsLayer { this.rotationX = 180f }, // 반대쪽 UI는 180도 회전,,
+                imageVector = vectorResource(Res.drawable.ic_refresh),
+                tint = White,
+                contentDescription = null
+            )
+        }
     }
 }
