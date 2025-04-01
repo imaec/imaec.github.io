@@ -20,6 +20,7 @@ import com.imaec.portfolio.model.SkillVo
 import com.imaec.portfolio.model.isWeb
 import com.imaec.portfolio.theme.Gray100
 import com.imaec.portfolio.theme.White
+import com.imaec.portfolio.theme.firaCode
 import com.imaec.portfolio.theme.pretendard
 import com.imaec.portfolio.ui.common.Title
 import kotlinx.coroutines.delay
@@ -54,7 +55,7 @@ fun HomeSkillTools(screenType: ScreenType) {
                         color = White,
                         fontSize = if (screenType.isWeb()) 24.sp else 16.sp,
                         fontWeight = FontWeight.SemiBold,
-                        fontFamily = if (isFontLoad) pretendard() else null
+                        fontFamily = if (isFontLoad) firaCode() else null
                     )
                 )
                 Text(
@@ -63,7 +64,7 @@ fun HomeSkillTools(screenType: ScreenType) {
                         color = Gray100,
                         fontSize = if (screenType.isWeb()) 20.sp else 12.sp,
                         fontWeight = FontWeight.Medium,
-                        fontFamily = if (isFontLoad) pretendard() else null,
+                        fontFamily = if (isFontLoad) firaCode() else null,
                         lineHeight = if (screenType.isWeb()) 32.sp else 20.sp
                     )
                 )
