@@ -267,6 +267,7 @@ private fun Dialog(
             item {
                 Column(
                     modifier = Modifier
+                        .fillMaxWidth()
                         .background(White)
                         .padding(
                             horizontal = if (screenType.isWeb()) 300.dp else 40.dp,
