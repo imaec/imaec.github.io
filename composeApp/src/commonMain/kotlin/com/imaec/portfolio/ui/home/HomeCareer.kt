@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -41,6 +42,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -52,6 +54,7 @@ import com.imaec.portfolio.theme.Gray100
 import com.imaec.portfolio.theme.Gray200
 import com.imaec.portfolio.theme.Gray600
 import com.imaec.portfolio.theme.Gray800
+import com.imaec.portfolio.theme.White
 import com.imaec.portfolio.theme.firaCode
 import com.imaec.portfolio.theme.pretendard
 import com.imaec.portfolio.ui.common.Tag
@@ -63,6 +66,7 @@ import org.jetbrains.compose.resources.vectorResource
 import portfolio.composeapp.generated.resources.Res
 import portfolio.composeapp.generated.resources.ic_arrow_down_circle
 import portfolio.composeapp.generated.resources.ic_arrow_up_circle
+import portfolio.composeapp.generated.resources.ic_refresh
 import portfolio.composeapp.generated.resources.ic_responsibility
 
 @Composable
@@ -84,9 +88,15 @@ fun HomeCareer(screenType: ScreenType) {
         )
         LazyVerticalGrid(
             modifier = Modifier
-                .widthIn(
-                    min = if (screenType.isWeb()) 700.dp else 300.dp,
-                    max = if (screenType.isWeb()) 1440.dp else 616.dp
+                .then(
+                    if (screenType.isWeb()) {
+                        Modifier.widthIn(
+                            min = if (screenType.isWeb()) 700.dp else 300.dp,
+                            max = if (screenType.isWeb()) 1440.dp else 616.dp
+                        )
+                    } else {
+                        Modifier.fillMaxWidth()
+                    }
                 )
                 .heightIn(
                     min = if (screenType.isWeb()) 500.dp else 280.dp,
@@ -107,7 +117,6 @@ fun HomeCareer(screenType: ScreenType) {
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun CareerItem(
     career: CareerVo,
@@ -159,97 +168,108 @@ private fun CareerItemFront(
     career: CareerVo,
     isFontLoad: Boolean
 ) {
-    Column(
-        modifier = Modifier
-            .width(if (screenType.isWeb()) 700.dp else 300.dp)
-            .height(if (screenType.isWeb()) 500.dp else 280.dp)
-            .background(color = Gray800, shape = RoundedCornerShape(8.dp))
-            .padding(if (screenType.isWeb()) 32.dp else 16.dp),
-        verticalArrangement = Arrangement.SpaceBetween
-    ) {
+    Box {
         Column(
-            verticalArrangement = Arrangement.spacedBy(if (screenType.isWeb()) 16.dp else 12.dp)
+            modifier = Modifier
+                .then(if (screenType.isWeb()) Modifier.width(700.dp) else Modifier.fillMaxWidth())
+                .height(if (screenType.isWeb()) 500.dp else 280.dp)
+                .background(color = Gray800, shape = RoundedCornerShape(8.dp))
+                .padding(if (screenType.isWeb()) 32.dp else 16.dp),
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
             Column(
-                verticalArrangement = Arrangement.spacedBy(if (screenType.isWeb()) 8.dp else 4.dp)
+                verticalArrangement = Arrangement.spacedBy(if (screenType.isWeb()) 16.dp else 12.dp)
             ) {
-                Text(
-                    text = career.period,
-                    style = TextStyle(
-                        color = Gray600,
-                        fontSize = if (screenType.isWeb()) 12.sp else 6.sp,
-                        fontWeight = FontWeight.Medium,
-                        fontFamily = if (isFontLoad) firaCode() else null
-                    )
-                )
-                Text(
-                    text = career.company,
-                    style = TextStyle(
-                        color = Gray100,
-                        fontSize = if (screenType.isWeb()) 24.sp else 12.sp,
-                        fontWeight = FontWeight.Bold,
-                        fontFamily = if (isFontLoad) pretendard() else null
-                    )
-                )
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(
-                        if (screenType.isWeb()) 6.dp else 4.dp
-                    )
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(if (screenType.isWeb()) 8.dp else 4.dp)
                 ) {
-                    Tag(
-                        screenType = screenType,
-                        text = career.team,
-                        fontFamily = if (isFontLoad) pretendard() else null
-                    )
-                    Tag(
-                        screenType = screenType,
-                        text = career.position,
-                        fontFamily = if (isFontLoad) pretendard() else null
-                    )
-                    if (career.job.isNotEmpty()) {
-                        Tag(
-                            screenType = screenType,
-                            text = career.job,
-                            fontFamily = if (isFontLoad) pretendard() else null
-                        )
-                    }
-                }
-            }
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                career.responsibilities.forEach {
                     Text(
-                        text = it,
+                        text = career.period,
                         style = TextStyle(
-                            color = Gray100,
-                            fontSize = if (screenType.isWeb()) 18.sp else 10.sp,
+                            color = Gray600,
+                            fontSize = if (screenType.isWeb()) 12.sp else 6.sp,
                             fontWeight = FontWeight.Medium,
-                            fontFamily = if (isFontLoad) pretendard() else null,
-                            lineHeight = if (screenType.isWeb()) 28.sp else 16.sp
-                        )
-                    )
-                }
-            }
-        }
-        Column(
-            verticalArrangement = Arrangement.spacedBy(if (screenType.isWeb()) 8.dp else 6.dp)
-        ) {
-            career.skills.forEach { skill ->
-                FlowRow(
-                    horizontalArrangement = Arrangement.spacedBy(
-                        if (screenType.isWeb()) 6.dp else 4.dp
-                    ),
-                    verticalArrangement = Arrangement.spacedBy(4.dp)
-                ) {
-                    skill.forEach {
-                        Tag(
-                            screenType = screenType,
-                            text = it,
                             fontFamily = if (isFontLoad) firaCode() else null
                         )
+                    )
+                    Text(
+                        text = career.company,
+                        style = TextStyle(
+                            color = Gray100,
+                            fontSize = if (screenType.isWeb()) 24.sp else 12.sp,
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = if (isFontLoad) pretendard() else null
+                        )
+                    )
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(
+                            if (screenType.isWeb()) 6.dp else 4.dp
+                        )
+                    ) {
+                        Tag(
+                            screenType = screenType,
+                            text = career.team,
+                            fontFamily = if (isFontLoad) pretendard() else null
+                        )
+                        Tag(
+                            screenType = screenType,
+                            text = career.position,
+                            fontFamily = if (isFontLoad) pretendard() else null
+                        )
+                        if (career.job.isNotEmpty()) {
+                            Tag(
+                                screenType = screenType,
+                                text = career.job,
+                                fontFamily = if (isFontLoad) pretendard() else null
+                            )
+                        }
+                    }
+                }
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    career.responsibilities.forEach {
+                        Text(
+                            text = it,
+                            style = TextStyle(
+                                color = Gray100,
+                                fontSize = if (screenType.isWeb()) 18.sp else 10.sp,
+                                fontWeight = FontWeight.Medium,
+                                fontFamily = if (isFontLoad) pretendard() else null,
+                                lineHeight = if (screenType.isWeb()) 28.sp else 16.sp
+                            )
+                        )
+                    }
+                }
+            }
+            Column(
+                verticalArrangement = Arrangement.spacedBy(if (screenType.isWeb()) 8.dp else 6.dp)
+            ) {
+                career.skills.forEach { skill ->
+                    FlowRow(
+                        horizontalArrangement = Arrangement.spacedBy(
+                            if (screenType.isWeb()) 6.dp else 4.dp
+                        ),
+                        verticalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        skill.forEach {
+                            Tag(
+                                screenType = screenType,
+                                text = it,
+                                fontFamily = if (isFontLoad) firaCode() else null
+                            )
+                        }
                     }
                 }
             }
         }
+        Icon(
+            modifier = Modifier
+                .padding(if (screenType.isWeb()) 32.dp else 16.dp)
+                .size(if (screenType.isWeb()) 36.dp else 18.dp)
+                .align(Alignment.TopEnd),
+            imageVector = vectorResource(Res.drawable.ic_refresh),
+            tint = White,
+            contentDescription = null
+        )
     }
 }
 
@@ -259,98 +279,117 @@ private fun CareerItemBack(
     career: CareerVo,
     isFontLoad: Boolean
 ) {
+    val density = LocalDensity.current
     val coroutineScope = rememberCoroutineScope()
     val listState = rememberLazyListState()
+    val scrollingHeight by remember { mutableStateOf(with(density) { 80.dp.toPx() }) }
 
-    Column(
-        modifier = Modifier
-            .width(if (screenType.isWeb()) 700.dp else 300.dp)
-            .height(if (screenType.isWeb()) 500.dp else 280.dp)
-            .background(color = Gray800, shape = RoundedCornerShape(8.dp))
-            .padding(if (screenType.isWeb()) 32.dp else 16.dp)
-            .graphicsLayer { this.rotationX = 180f }, // 반대쪽 UI는 180도 회전,
-        verticalArrangement = Arrangement.spacedBy(if (screenType.isWeb()) 20.dp else 16.dp)
-    ) {
-        Text(
-            text = career.company,
-            style = TextStyle(
-                color = Gray100,
-                fontSize = if (screenType.isWeb()) 24.sp else 12.sp,
-                fontWeight = FontWeight.Bold,
-                fontFamily = if (isFontLoad) pretendard() else null
-            )
-        )
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(
-                if (screenType.isWeb()) 6.dp else 4.dp
-            ),
-            verticalAlignment = Alignment.CenterVertically
+    Box {
+        Column(
+            modifier = Modifier
+                .then(if (screenType.isWeb()) Modifier.width(700.dp) else Modifier.fillMaxWidth())
+                .height(if (screenType.isWeb()) 500.dp else 280.dp)
+                .background(color = Gray800, shape = RoundedCornerShape(8.dp))
+                .padding(if (screenType.isWeb()) 32.dp else 16.dp)
+                .graphicsLayer { this.rotationX = 180f }, // 반대쪽 UI는 180도 회전,
+            verticalArrangement = Arrangement.spacedBy(if (screenType.isWeb()) 20.dp else 16.dp)
         ) {
-            Icon(
-                modifier = Modifier.size(
-                    if (screenType.isWeb()) 20.dp else 10.dp
-                ),
-                painter = painterResource(Res.drawable.ic_responsibility),
-                tint = Color.Unspecified,
-                contentDescription = null
-            )
             Text(
-                text = "경력 소개",
+                text = career.company,
                 style = TextStyle(
-                    color = Gray200,
-                    fontSize = if (screenType.isWeb()) 20.sp else 10.sp,
-                    fontWeight = FontWeight.SemiBold,
+                    color = Gray100,
+                    fontSize = if (screenType.isWeb()) 24.sp else 12.sp,
+                    fontWeight = FontWeight.Bold,
                     fontFamily = if (isFontLoad) pretendard() else null
                 )
             )
-        }
-        Box {
-            LazyColumn(state = listState) {
-                item {
-                    Text(
-                        text = career.work,
-                        style = TextStyle(
-                            color = Gray100,
-                            fontSize = if (screenType.isWeb()) 18.sp else 10.sp,
-                            fontWeight = FontWeight.Medium,
-                            fontFamily = if (isFontLoad) pretendard() else null,
-                            lineHeight = if (screenType.isWeb()) 28.sp else 16.sp
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(
+                    if (screenType.isWeb()) 6.dp else 4.dp
+                ),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    modifier = Modifier.size(
+                        if (screenType.isWeb()) 20.dp else 10.dp
+                    ),
+                    painter = painterResource(Res.drawable.ic_responsibility),
+                    tint = Color.Unspecified,
+                    contentDescription = null
+                )
+                Text(
+                    text = "경력 소개",
+                    style = TextStyle(
+                        color = Gray200,
+                        fontSize = if (screenType.isWeb()) 20.sp else 10.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        fontFamily = if (isFontLoad) pretendard() else null
+                    )
+                )
+            }
+            Box {
+                LazyColumn(state = listState) {
+                    item {
+                        Text(
+                            text = career.work,
+                            style = TextStyle(
+                                color = Gray100,
+                                fontSize = if (screenType.isWeb()) 18.sp else 10.sp,
+                                fontWeight = FontWeight.Medium,
+                                fontFamily = if (isFontLoad) pretendard() else null,
+                                lineHeight = if (screenType.isWeb()) 28.sp else 16.sp
+                            )
                         )
+                    }
+                }
+                if (listState.canScrollBackward) {
+                    Icon(
+                        modifier = Modifier
+                            .size(if (screenType.isWeb()) 48.dp else 32.dp)
+                            .align(Alignment.TopCenter)
+                            .clip(CircleShape)
+                            .clickable {
+                                coroutineScope.launch {
+                                    listState.animateScrollBy(
+                                        scrollingHeight * -1,
+                                        tween(500)
+                                    )
+                                }
+                            }
+                            .padding(if (screenType.isWeb()) 0.dp else 4.dp),
+                        imageVector = vectorResource(Res.drawable.ic_arrow_up_circle),
+                        tint = Color.Unspecified,
+                        contentDescription = null
+                    )
+                }
+                if (listState.canScrollForward) {
+                    Icon(
+                        modifier = Modifier
+                            .size(if (screenType.isWeb()) 48.dp else 32.dp)
+                            .align(Alignment.BottomCenter)
+                            .clip(CircleShape)
+                            .clickable {
+                                coroutineScope.launch {
+                                    listState.animateScrollBy(scrollingHeight, tween(500))
+                                }
+                            }
+                            .padding(if (screenType.isWeb()) 0.dp else 4.dp),
+                        imageVector = vectorResource(Res.drawable.ic_arrow_down_circle),
+                        tint = Color.Unspecified,
+                        contentDescription = null
                     )
                 }
             }
-            if (listState.canScrollBackward) {
-                Icon(
-                    modifier = Modifier
-                        .size(if (screenType.isWeb()) 48.dp else 24.dp)
-                        .align(Alignment.TopCenter)
-                        .clip(CircleShape)
-                        .clickable {
-                            coroutineScope.launch {
-                                listState.animateScrollBy(-100f, tween(500))
-                            }
-                        },
-                    imageVector = vectorResource(Res.drawable.ic_arrow_up_circle),
-                    tint = Color.Unspecified,
-                    contentDescription = null
-                )
-            }
-            if (listState.canScrollForward) {
-                Icon(
-                    modifier = Modifier
-                        .size(if (screenType.isWeb()) 48.dp else 24.dp)
-                        .align(Alignment.BottomCenter)
-                        .clip(CircleShape)
-                        .clickable {
-                            coroutineScope.launch {
-                                listState.animateScrollBy(100f, tween(500))
-                            }
-                        },
-                    imageVector = vectorResource(Res.drawable.ic_arrow_down_circle),
-                    tint = Color.Unspecified,
-                    contentDescription = null
-                )
-            }
         }
+        Icon(
+            modifier = Modifier
+                .padding(if (screenType.isWeb()) 32.dp else 16.dp)
+                .size(if (screenType.isWeb()) 36.dp else 18.dp)
+                .align(Alignment.BottomEnd)
+                .graphicsLayer { this.rotationX = 180f }, // 반대쪽 UI는 180도 회전,,
+            imageVector = vectorResource(Res.drawable.ic_refresh),
+            tint = White,
+            contentDescription = null
+        )
     }
 }

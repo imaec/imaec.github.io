@@ -40,7 +40,6 @@ fun App(
             val height = constraints.maxHeight
 
             screenType = ScreenType.fromScreenWidth(with(density) { width.toDp() }.value.toInt())
-            println(screenType)
 
             val placeables = measurables.map { measurable ->
                 measurable.measure(constraints)

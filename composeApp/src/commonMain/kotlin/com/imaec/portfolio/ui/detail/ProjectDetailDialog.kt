@@ -1,5 +1,11 @@
 package com.imaec.portfolio.ui.detail
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,6 +27,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -68,218 +75,255 @@ fun ProjectDetailDialog(
     onClickLink: (String) -> Unit,
     onDismiss: () -> Unit
 ) {
-    val density = LocalDensity.current
+    var visible by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        visible = true
+    }
 
     Box(
         modifier = Modifier
+            .animateContentSize()
             .fillMaxSize()
-            .background(Gray900.copy(alpha = 0.6f))
+            .background(Gray900.copy(alpha = 0.8f))
             .clickable(
                 enabled = true,
                 indication = null,
                 interactionSource = remember { MutableInteractionSource() }
             ) { onDismiss() }
     ) {
-        Box(
-            modifier = Modifier
-                .padding(
-                    horizontal = if (screenType.isWeb()) 120.dp else 45.dp,
-                    vertical = if (screenType.isWeb()) 80.dp else 30.dp
-                )
-                .fillMaxSize()
-                .clip(RoundedCornerShape(16.dp))
-                .background(White)
-                .clickable(
-                    enabled = true,
-                    indication = null,
-                    interactionSource = remember { MutableInteractionSource() },
-                    onClick = {}
-                )
+        AnimatedVisibility(
+            visible = visible,
+            enter = scaleIn() + fadeIn(),
+            exit = scaleOut() + fadeOut()
         ) {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                contentPadding = PaddingValues(
-                    bottom = if (screenType.isWeb()) 200.dp else 48.dp
-                )
-            ) {
-                item {
-                    var topHeight by remember { mutableStateOf(0) }
-                    val topHeightDp by remember {
-                        derivedStateOf {
-                            with(density) {
-                                if (projectDetail.cover != null) {
-                                    (topHeight * 0.8).toInt().toDp()
-                                } else {
-                                    topHeight.toDp() - (if (screenType.isWeb()) 34.dp else 20.dp)
-                                }
-                            }
-                        }
-                    }
+            Dialog(
+                screenType = screenType,
+                projectDetail = projectDetail,
+                onClickLink = onClickLink,
+                onDismiss = onDismiss
+            )
+        }
+    }
+}
 
-                    Box {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(topHeightDp)
-                                .background(
-                                    brush = Brush.verticalGradient(colors = listOf(Gray800, Gray700))
-                                )
-                        )
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .onGloballyPositioned {
-                                    topHeight = it.size.height
-                                },
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text(
-                                modifier = Modifier.padding(
-                                    top = if (screenType.isWeb()) 228.dp else 104.dp
-                                ),
-                                text = projectDetail.title,
-                                style = TextStyle(
-                                    color = White,
-                                    fontSize = if (screenType.isWeb()) 48.sp else 24.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    fontFamily = pretendard()
-                                ),
-                                textAlign = TextAlign.Center
-                            )
-                            if (projectDetail.links.isNotEmpty()) {
-                                Row(
-                                    modifier = Modifier.padding(
-                                        vertical = if (screenType.isWeb()) 36.dp else 20.dp
-                                    ),
-                                    horizontalArrangement = Arrangement.spacedBy(
-                                        if (screenType.isWeb()) 36.dp else 20.dp
-                                    )
-                                ) {
-                                    projectDetail.links.forEach {
-                                        Column(
-                                            modifier = Modifier.clickable {
-                                                onClickLink(it.third)
-                                            },
-                                            verticalArrangement = Arrangement.spacedBy(4.dp),
-                                            horizontalAlignment = Alignment.CenterHorizontally
-                                        ) {
-                                            Icon(
-                                                modifier = Modifier.size(
-                                                    if (screenType.isWeb()) 40.dp else 20.dp
-                                                ),
-                                                imageVector = vectorResource(it.first),
-                                                tint = Gray100,
-                                                contentDescription = null
-                                            )
-                                            Text(
-                                                text = it.second,
-                                                style = TextStyle(
-                                                    color = Gray100,
-                                                    fontSize = if (screenType.isWeb()) {
-                                                        14.sp
-                                                    } else {
-                                                        8.sp
-                                                    },
-                                                    fontWeight = FontWeight.Medium,
-                                                    fontFamily = firaCode()
-                                                ),
-                                                textAlign = TextAlign.Center
-                                            )
-                                        }
-                                    }
-                                }
-                            } else {
-                                Box(
-                                    modifier = Modifier.height(
-                                        if (screenType.isWeb()) 100.dp else 40.dp
-                                    )
-                                )
-                            }
-                            if (projectDetail.cover != null) {
-                                Image(
-                                    modifier = Modifier.width(
-                                        if (screenType.isWeb()) 800.dp else 240.dp
-                                    ),
-                                    painter = painterResource(projectDetail.cover),
-                                    contentScale = ContentScale.FillWidth,
-                                    contentDescription = null
-                                )
-                            }
-                            Text(
-                                modifier = Modifier.padding(
-                                    top = if (screenType.isWeb()) 10.dp else 4.dp
-                                ),
-                                text = "2024. 08. 02 ~ 2024. 10. 04",
-                                style = TextStyle(
-                                    color = Gray900,
-                                    fontSize = if (screenType.isWeb()) 16.sp else 10.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    fontFamily = firaCode()
-                                )
-                            )
-                        }
-                    }
-                }
-                item {
-                    Column(
-                        modifier = Modifier.padding(
-                            horizontal = if (screenType.isWeb()) 300.dp else 40.dp,
-                            vertical = if (screenType.isWeb()) 100.dp else 40.dp
-                        ),
-                        verticalArrangement = Arrangement.spacedBy(
-                            if (screenType.isWeb()) 80.dp else 40.dp
-                        )
-                    ) {
-                        Content(
-                            screenType = screenType,
-                            icon = Res.drawable.ic_summary,
-                            title = "Project Summary",
-                            content = projectDetail.projectSummary
-                        )
-                        Content(
-                            screenType = screenType,
-                            icon = Res.drawable.ic_responsibility,
-                            title = "Responsibilities",
-                            content = projectDetail.responsibilities
-                        )
-                        if (projectDetail.troubleShootings.isNotEmpty()) {
-                            Content(
-                                screenType = screenType,
-                                icon = Res.drawable.ic_trouble_shooting,
-                                title = "Trouble Shooting",
-                                content = projectDetail.troubleShootings
-                            )
-                        }
-                        Content(
-                            screenType = screenType,
-                            icon = Res.drawable.ic_tech_skill,
-                            title = "Tech Skills",
-                            content = projectDetail.techSkills
-                        )
-                        if (projectDetail.notes.isNotEmpty()) {
-                            Content(
-                                screenType = screenType,
-                                icon = Res.drawable.ic_note,
-                                title = "Notes",
-                                content = projectDetail.notes
-                            )
-                        }
+@Composable
+private fun Dialog(
+    screenType: ScreenType,
+    projectDetail: ProjectDetailVo,
+    onClickLink: (String) -> Unit,
+    onDismiss: () -> Unit
+) {
+    val density = LocalDensity.current
+
+    Box(
+        modifier = Modifier
+            .padding(
+                horizontal = if (screenType.isWeb()) 120.dp else 24.dp,
+                vertical = if (screenType.isWeb()) 80.dp else 30.dp
+            )
+            .fillMaxSize()
+            .clip(RoundedCornerShape(16.dp))
+            .background(White)
+            .clickable(
+                enabled = true,
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() },
+                onClick = {}
+            )
+    ) {
+        var topHeight by remember { mutableStateOf(0) }
+        val topHeightDp by remember {
+            derivedStateOf {
+                with(density) {
+                    if (projectDetail.cover != null) {
+                        (topHeight * 0.8).toInt().toDp()
+                    } else {
+                        topHeight.toDp() - (if (screenType.isWeb()) 34.dp else 20.dp)
                     }
                 }
             }
-            Icon(
-                modifier = Modifier
-                    .padding(if (screenType.isWeb()) 40.dp else 20.dp)
-                    .size(if (screenType.isWeb()) 48.dp else 24.dp)
-                    .clip(CircleShape)
-                    .clickable { onDismiss() }
-                    .align(Alignment.TopEnd),
-                imageVector = vectorResource(Res.drawable.ic_close_circle),
-                tint = White,
-                contentDescription = null
-            )
         }
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(topHeightDp)
+                .background(Gray800)
+        )
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            contentPadding = PaddingValues(
+                bottom = if (screenType.isWeb()) 200.dp else 48.dp
+            )
+        ) {
+            item {
+                Box(Modifier.background(White)) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(topHeightDp)
+                            .background(
+                                brush = Brush.verticalGradient(
+                                    colors = listOf(Gray800, Gray700)
+                                )
+                            )
+                    )
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .onGloballyPositioned {
+                                topHeight = it.size.height
+                            },
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            modifier = Modifier.padding(
+                                top = if (screenType.isWeb()) 228.dp else 104.dp
+                            ),
+                            text = projectDetail.title,
+                            style = TextStyle(
+                                color = White,
+                                fontSize = if (screenType.isWeb()) 48.sp else 24.sp,
+                                fontWeight = FontWeight.Bold,
+                                fontFamily = pretendard()
+                            ),
+                            textAlign = TextAlign.Center
+                        )
+                        if (projectDetail.links.isNotEmpty()) {
+                            Row(
+                                modifier = Modifier.padding(
+                                    vertical = if (screenType.isWeb()) 36.dp else 20.dp
+                                ),
+                                horizontalArrangement = Arrangement.spacedBy(
+                                    if (screenType.isWeb()) 36.dp else 20.dp
+                                )
+                            ) {
+                                projectDetail.links.forEach {
+                                    Column(
+                                        modifier = Modifier.clickable {
+                                            onClickLink(it.third)
+                                        },
+                                        verticalArrangement = Arrangement.spacedBy(4.dp),
+                                        horizontalAlignment = Alignment.CenterHorizontally
+                                    ) {
+                                        Icon(
+                                            modifier = Modifier.size(
+                                                if (screenType.isWeb()) 40.dp else 20.dp
+                                            ),
+                                            imageVector = vectorResource(it.first),
+                                            tint = Gray100,
+                                            contentDescription = null
+                                        )
+                                        Text(
+                                            text = it.second,
+                                            style = TextStyle(
+                                                color = Gray100,
+                                                fontSize = if (screenType.isWeb()) {
+                                                    14.sp
+                                                } else {
+                                                    8.sp
+                                                },
+                                                fontWeight = FontWeight.Medium,
+                                                fontFamily = firaCode()
+                                            ),
+                                            textAlign = TextAlign.Center
+                                        )
+                                    }
+                                }
+                            }
+                        } else {
+                            Box(
+                                modifier = Modifier.height(
+                                    if (screenType.isWeb()) 100.dp else 40.dp
+                                )
+                            )
+                        }
+                        if (projectDetail.cover != null) {
+                            Image(
+                                modifier = Modifier.width(
+                                    if (screenType.isWeb()) 800.dp else 240.dp
+                                ),
+                                painter = painterResource(projectDetail.cover),
+                                contentScale = ContentScale.FillWidth,
+                                contentDescription = null
+                            )
+                        }
+                        Text(
+                            modifier = Modifier.padding(
+                                top = if (screenType.isWeb()) 10.dp else 4.dp
+                            ),
+                            text = "2024. 08. 02 ~ 2024. 10. 04",
+                            style = TextStyle(
+                                color = Gray900,
+                                fontSize = if (screenType.isWeb()) 16.sp else 10.sp,
+                                fontWeight = FontWeight.Bold,
+                                fontFamily = firaCode()
+                            )
+                        )
+                    }
+                }
+            }
+            item {
+                Column(
+                    modifier = Modifier
+                        .background(White)
+                        .padding(
+                            horizontal = if (screenType.isWeb()) 300.dp else 40.dp,
+                            vertical = if (screenType.isWeb()) 100.dp else 40.dp
+                        ),
+                    verticalArrangement = Arrangement.spacedBy(
+                        if (screenType.isWeb()) 80.dp else 40.dp
+                    )
+                ) {
+                    Content(
+                        screenType = screenType,
+                        icon = Res.drawable.ic_summary,
+                        title = "Project Summary",
+                        content = projectDetail.projectSummary
+                    )
+                    Content(
+                        screenType = screenType,
+                        icon = Res.drawable.ic_responsibility,
+                        title = "Responsibilities",
+                        content = projectDetail.responsibilities
+                    )
+                    if (projectDetail.troubleShootings.isNotEmpty()) {
+                        Content(
+                            screenType = screenType,
+                            icon = Res.drawable.ic_trouble_shooting,
+                            title = "Trouble Shooting",
+                            content = projectDetail.troubleShootings
+                        )
+                    }
+                    Content(
+                        screenType = screenType,
+                        icon = Res.drawable.ic_tech_skill,
+                        title = "Tech Skills",
+                        content = projectDetail.techSkills
+                    )
+                    if (projectDetail.notes.isNotEmpty()) {
+                        Content(
+                            screenType = screenType,
+                            icon = Res.drawable.ic_note,
+                            title = "Notes",
+                            content = projectDetail.notes
+                        )
+                    }
+                }
+            }
+        }
+        Icon(
+            modifier = Modifier
+                .padding(if (screenType.isWeb()) 40.dp else 20.dp)
+                .size(if (screenType.isWeb()) 48.dp else 24.dp)
+                .clip(CircleShape)
+                .clickable { onDismiss() }
+                .align(Alignment.TopEnd),
+            imageVector = vectorResource(Res.drawable.ic_close_circle),
+            tint = White,
+            contentDescription = null
+        )
     }
 }
 

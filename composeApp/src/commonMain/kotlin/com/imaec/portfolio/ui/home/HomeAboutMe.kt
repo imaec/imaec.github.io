@@ -33,7 +33,7 @@ fun HomeAboutMe(screenType: ScreenType) {
         }
     }
 
-    Column(verticalArrangement = Arrangement.spacedBy(if (screenType.isWeb()) 60.dp else 20.dp)) {
+    Column(verticalArrangement = Arrangement.spacedBy(if (screenType.isWeb()) 60.dp else 32.dp)) {
         Title(
             title = "About Me",
             screenType = screenType,
