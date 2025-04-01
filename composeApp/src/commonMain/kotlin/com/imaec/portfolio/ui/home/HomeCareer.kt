@@ -28,6 +28,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.imaec.portfolio.model.CareerVo
+import com.imaec.portfolio.model.ScreenType
+import com.imaec.portfolio.model.isWeb
 import com.imaec.portfolio.theme.Gray100
 import com.imaec.portfolio.theme.Gray600
 import com.imaec.portfolio.theme.Gray800
@@ -38,7 +40,7 @@ import com.imaec.portfolio.ui.common.Title
 import kotlinx.coroutines.delay
 
 @Composable
-fun HomeCareer(isFull: Boolean) {
+fun HomeCareer(screenType: ScreenType) {
     var isFontLoad by remember { mutableStateOf(false) }
 
     LaunchedEffect(isFontLoad) {
@@ -48,24 +50,32 @@ fun HomeCareer(isFull: Boolean) {
         }
     }
 
-    Column(verticalArrangement = Arrangement.spacedBy(if (isFull) 60.dp else 16.dp)) {
-        Title(title = "Career", isFull = isFull, isFontLoad = isFontLoad)
+    Column(verticalArrangement = Arrangement.spacedBy(if (screenType.isWeb()) 60.dp else 16.dp)) {
+        Title(
+            title = "Career",
+            screenType = screenType,
+            isFontLoad = isFontLoad
+        )
         LazyVerticalGrid(
             modifier = Modifier
                 .widthIn(
-                    min = if (isFull) 700.dp else 300.dp,
-                    max = if (isFull) 1440.dp else 616.dp
+                    min = if (screenType.isWeb()) 700.dp else 300.dp,
+                    max = if (screenType.isWeb()) 1440.dp else 616.dp
                 )
                 .heightIn(
-                    min = if (isFull) 500.dp else 280.dp,
-                    max = if (isFull) 5600.dp else 3360.dp
+                    min = if (screenType.isWeb()) 500.dp else 280.dp,
+                    max = if (screenType.isWeb()) 5600.dp else 3360.dp
                 ),
-            columns = GridCells.Adaptive(minSize = if (isFull) 700.dp else 300.dp),
-            horizontalArrangement = Arrangement.spacedBy(if (isFull) 40.dp else 16.dp),
-            verticalArrangement = Arrangement.spacedBy(if (isFull) 40.dp else 16.dp)
+            columns = GridCells.Adaptive(minSize = if (screenType.isWeb()) 700.dp else 300.dp),
+            horizontalArrangement = Arrangement.spacedBy(if (screenType.isWeb()) 40.dp else 16.dp),
+            verticalArrangement = Arrangement.spacedBy(if (screenType.isWeb()) 40.dp else 16.dp)
         ) {
             items(CareerVo.items()) {
-                CareerItem(career = it, isFull = isFull, isFontLoad = isFontLoad)
+                CareerItem(
+                    career = it,
+                    screenType = screenType,
+                    isFontLoad = isFontLoad
+                )
             }
         }
     }
@@ -73,22 +83,30 @@ fun HomeCareer(isFull: Boolean) {
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun CareerItem(career: CareerVo, isFull: Boolean, isFontLoad: Boolean) {
+private fun CareerItem(
+    career: CareerVo,
+    screenType: ScreenType,
+    isFontLoad: Boolean
+) {
     Column(
         modifier = Modifier
-            .width(if (isFull) 700.dp else 300.dp)
-            .height(if (isFull) 500.dp else 280.dp)
+            .width(if (screenType.isWeb()) 700.dp else 300.dp)
+            .height(if (screenType.isWeb()) 500.dp else 280.dp)
             .background(color = Gray800, shape = RoundedCornerShape(8.dp))
-            .padding(if (isFull) 32.dp else 16.dp),
+            .padding(if (screenType.isWeb()) 32.dp else 16.dp),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Column(verticalArrangement = Arrangement.spacedBy(if (isFull) 16.dp else 12.dp)) {
-            Column(verticalArrangement = Arrangement.spacedBy(if (isFull) 8.dp else 4.dp)) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(if (screenType.isWeb()) 16.dp else 12.dp)
+        ) {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(if (screenType.isWeb()) 8.dp else 4.dp)
+            ) {
                 Text(
                     text = career.period,
                     style = TextStyle(
                         color = Gray600,
-                        fontSize = if (isFull) 12.sp else 6.sp,
+                        fontSize = if (screenType.isWeb()) 12.sp else 6.sp,
                         fontWeight = FontWeight.Medium,
                         fontFamily = if (isFontLoad) firaCode() else null
                     )
@@ -97,25 +115,29 @@ private fun CareerItem(career: CareerVo, isFull: Boolean, isFontLoad: Boolean) {
                     text = career.company,
                     style = TextStyle(
                         color = Gray100,
-                        fontSize = if (isFull) 24.sp else 12.sp,
+                        fontSize = if (screenType.isWeb()) 24.sp else 12.sp,
                         fontWeight = FontWeight.Bold,
                         fontFamily = if (isFontLoad) pretendard() else null
                     )
                 )
-                Row(horizontalArrangement = Arrangement.spacedBy(if (isFull) 6.dp else 4.dp)) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(
+                        if (screenType.isWeb()) 6.dp else 4.dp
+                    )
+                ) {
                     Tag(
-                        isFull = isFull,
+                        screenType = screenType,
                         text = career.team,
                         fontFamily = if (isFontLoad) pretendard() else null
                     )
                     Tag(
-                        isFull = isFull,
+                        screenType = screenType,
                         text = career.position,
                         fontFamily = if (isFontLoad) pretendard() else null
                     )
                     if (career.job.isNotEmpty()) {
                         Tag(
-                            isFull = isFull,
+                            screenType = screenType,
                             text = career.job,
                             fontFamily = if (isFontLoad) pretendard() else null
                         )
@@ -128,24 +150,28 @@ private fun CareerItem(career: CareerVo, isFull: Boolean, isFontLoad: Boolean) {
                         text = it,
                         style = TextStyle(
                             color = Gray100,
-                            fontSize = if (isFull) 18.sp else 10.sp,
+                            fontSize = if (screenType.isWeb()) 18.sp else 10.sp,
                             fontWeight = FontWeight.Medium,
                             fontFamily = if (isFontLoad) pretendard() else null,
-                            lineHeight = if (isFull) 28.sp else 16.sp
+                            lineHeight = if (screenType.isWeb()) 28.sp else 16.sp
                         )
                     )
                 }
             }
         }
-        Column(verticalArrangement = Arrangement.spacedBy(if (isFull) 8.dp else 6.dp)) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(if (screenType.isWeb()) 8.dp else 6.dp)
+        ) {
             career.skills.forEach { skill ->
                 FlowRow(
-                    horizontalArrangement = Arrangement.spacedBy(if (isFull) 6.dp else 4.dp),
+                    horizontalArrangement = Arrangement.spacedBy(
+                        if (screenType.isWeb()) 6.dp else 4.dp
+                    ),
                     verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     skill.forEach {
                         Tag(
-                            isFull = isFull,
+                            screenType = screenType,
                             text = it,
                             fontFamily = if (isFontLoad) firaCode() else null
                         )

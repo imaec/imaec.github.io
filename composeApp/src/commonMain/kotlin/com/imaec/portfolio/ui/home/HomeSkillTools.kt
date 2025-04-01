@@ -15,7 +15,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.imaec.portfolio.model.ScreenType
 import com.imaec.portfolio.model.SkillVo
+import com.imaec.portfolio.model.isWeb
 import com.imaec.portfolio.theme.Gray100
 import com.imaec.portfolio.theme.White
 import com.imaec.portfolio.theme.pretendard
@@ -23,7 +25,7 @@ import com.imaec.portfolio.ui.common.Title
 import kotlinx.coroutines.delay
 
 @Composable
-fun HomeSkillTools(isFull: Boolean) {
+fun HomeSkillTools(screenType: ScreenType) {
     var isFontLoad by remember { mutableStateOf(false) }
 
     LaunchedEffect(isFontLoad) {
@@ -35,16 +37,22 @@ fun HomeSkillTools(isFull: Boolean) {
 
     Column(
         modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(if (isFull) 60.dp else 20.dp)
+        verticalArrangement = Arrangement.spacedBy(if (screenType.isWeb()) 60.dp else 20.dp)
     ) {
-        Title(title = "Skill&Tools", isFull = isFull, isFontLoad = isFontLoad)
+        Title(
+            title = "Skill&Tools",
+            screenType = screenType,
+            isFontLoad = isFontLoad
+        )
         SkillVo.items().forEach {
-            Column(verticalArrangement = Arrangement.spacedBy(if (isFull) 20.dp else 8.dp)) {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(if (screenType.isWeb()) 20.dp else 8.dp)
+            ) {
                 Text(
                     text = it.title,
                     style = TextStyle(
                         color = White,
-                        fontSize = if (isFull) 24.sp else 16.sp,
+                        fontSize = if (screenType.isWeb()) 24.sp else 16.sp,
                         fontWeight = FontWeight.SemiBold,
                         fontFamily = if (isFontLoad) pretendard() else null
                     )
@@ -53,10 +61,10 @@ fun HomeSkillTools(isFull: Boolean) {
                     text = it.content,
                     style = TextStyle(
                         color = Gray100,
-                        fontSize = if (isFull) 20.sp else 12.sp,
+                        fontSize = if (screenType.isWeb()) 20.sp else 12.sp,
                         fontWeight = FontWeight.Medium,
                         fontFamily = if (isFontLoad) pretendard() else null,
-                        lineHeight = if (isFull) 32.sp else 20.sp
+                        lineHeight = if (screenType.isWeb()) 32.sp else 20.sp
                     )
                 )
             }

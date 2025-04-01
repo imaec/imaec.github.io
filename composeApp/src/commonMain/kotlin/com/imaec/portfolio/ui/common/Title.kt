@@ -14,29 +14,35 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.imaec.portfolio.model.ScreenType
+import com.imaec.portfolio.model.isWeb
 import com.imaec.portfolio.theme.Gray100
 import com.imaec.portfolio.theme.Gray200
 import com.imaec.portfolio.theme.firaCode
 
 @Composable
-fun Title(title: String, isFull: Boolean, isFontLoad: Boolean) {
+fun Title(
+    title: String,
+    screenType: ScreenType,
+    isFontLoad: Boolean
+) {
     Row(
-        horizontalArrangement = Arrangement.spacedBy(if (isFull) 30.dp else 8.dp),
+        horizontalArrangement = Arrangement.spacedBy(if (screenType.isWeb()) 30.dp else 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
             text = title,
             style = TextStyle(
                 color = Gray200,
-                fontSize = if (isFull) 48.sp else 20.sp,
+                fontSize = if (screenType.isWeb()) 48.sp else 20.sp,
                 fontWeight = FontWeight.Bold,
                 fontFamily = if (isFontLoad) firaCode() else null
             )
         )
         Box(
             modifier = Modifier
-                .width(if (isFull) 360.dp else 100.dp)
-                .height(if (isFull) 4.dp else 2.dp)
+                .width(if (screenType.isWeb()) 360.dp else 100.dp)
+                .height(if (screenType.isWeb()) 4.dp else 2.dp)
                 .background(Gray100)
         )
     }

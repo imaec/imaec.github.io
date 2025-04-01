@@ -1,12 +1,14 @@
 package com.imaec.portfolio
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.layout.Layout
 import com.imaec.portfolio.model.ProjectDetailVo
+import com.imaec.portfolio.model.ScreenType
 import com.imaec.portfolio.ui.home.HomeScreen
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -14,14 +16,19 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Preview
 fun App(
     onClickLink: (String) -> Unit = {},
-    onShowDetail: (ProjectDetailVo) -> Unit = {}
+    onShowDetail: (ProjectDetailVo) -> Unit = {},
+    onScreenWidthChanged: (Int) -> Unit = {},
 ) {
     var screenWidth by remember { mutableStateOf(0) }
+
+    LaunchedEffect(screenWidth) {
+        onScreenWidthChanged(screenWidth)
+    }
 
     Layout(
         content = {
             HomeScreen(
-                isFull = screenWidth >= 1300,
+                screenType = ScreenType.fromScreenWidth(screenWidth),
                 onClickLink = onClickLink,
                 onShowDetail = onShowDetail
             )

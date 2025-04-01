@@ -11,22 +11,28 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.imaec.portfolio.model.ScreenType
+import com.imaec.portfolio.model.isWeb
 import com.imaec.portfolio.theme.Gray100
 import com.imaec.portfolio.theme.Gray600
 
 @Composable
-fun Tag(isFull: Boolean, text: String, fontFamily: FontFamily?) {
+fun Tag(
+    screenType: ScreenType,
+    text: String,
+    fontFamily: FontFamily?
+) {
     Text(
         modifier = Modifier
             .background(color = Gray600, shape = RoundedCornerShape(4.dp))
             .padding(
-                horizontal = if (isFull) 6.dp else 4.dp,
-                vertical = if (isFull) 6.dp else 2.dp
+                horizontal = if (screenType.isWeb()) 6.dp else 4.dp,
+                vertical = if (screenType.isWeb()) 6.dp else 2.dp
             ),
         text = text,
         style = TextStyle(
             color = Gray100,
-            fontSize = if (isFull) 12.sp else 8.sp,
+            fontSize = if (screenType.isWeb()) 12.sp else 8.sp,
             fontWeight = FontWeight.Medium,
             fontFamily = fontFamily
         )

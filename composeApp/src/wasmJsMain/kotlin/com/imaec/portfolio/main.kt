@@ -32,6 +32,9 @@ fun main() {
                 },
                 onShowDetail = {
                     projectDetail = it
+                },
+                onScreenWidthChanged = {
+
                 }
             )
             if (projectDetail != null) {

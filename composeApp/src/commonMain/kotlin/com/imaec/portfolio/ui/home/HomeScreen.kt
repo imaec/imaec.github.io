@@ -16,12 +16,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.dp
 import com.imaec.portfolio.model.ProjectDetailVo
+import com.imaec.portfolio.model.ScreenType
+import com.imaec.portfolio.model.isWeb
 import com.imaec.portfolio.theme.Gray400
 import com.imaec.portfolio.theme.Gray800
 
 @Composable
 fun HomeScreen(
-    isFull: Boolean,
+    screenType: ScreenType,
     onClickLink: (String) -> Unit,
     onShowDetail: (ProjectDetailVo) -> Unit
 ) {
@@ -35,11 +37,11 @@ fun HomeScreen(
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             HomeTopBar(
                 listState = listState,
-                isFull = isFull
+                screenType = screenType
             )
             HomeContent(
                 listState = listState,
-                isFull = isFull,
+                screenType = screenType,
                 onClickLink = onClickLink,
                 onShowDetail = onShowDetail
             )
@@ -50,39 +52,39 @@ fun HomeScreen(
 @Composable
 private fun HomeContent(
     listState: LazyListState,
-    isFull: Boolean,
+    screenType: ScreenType,
     onClickLink: (String) -> Unit,
     onShowDetail: (ProjectDetailVo) -> Unit
 ) {
     LazyColumn(
         state = listState,
         modifier = Modifier.widthIn(max = 1640.dp),
-        verticalArrangement = Arrangement.spacedBy(if (isFull) 200.dp else 60.dp),
+        verticalArrangement = Arrangement.spacedBy(if (screenType.isWeb()) 200.dp else 60.dp),
         contentPadding = PaddingValues(
-            start = if (isFull) 100.dp else 20.dp,
-            end = if (isFull) 100.dp else 20.dp,
-            top = if (isFull) 100.dp else 20.dp,
-            bottom = if (isFull) 100.dp else 60.dp,
+            start = if (screenType.isWeb()) 100.dp else 20.dp,
+            end = if (screenType.isWeb()) 100.dp else 20.dp,
+            top = if (screenType.isWeb()) 100.dp else 20.dp,
+            bottom = if (screenType.isWeb()) 100.dp else 60.dp,
         )
     ) {
         item {
             HomeProfile(
-                isFull = isFull,
+                screenType = screenType,
                 onClickLink = onClickLink,
             )
         }
         item {
-            HomeAboutMe(isFull = isFull)
+            HomeAboutMe(screenType = screenType)
         }
         item {
-            HomeSkillTools(isFull = isFull)
+            HomeSkillTools(screenType = screenType)
         }
         item {
-            HomeCareer(isFull = isFull)
+            HomeCareer(screenType = screenType)
         }
         item {
             HomeProjects(
-                isFull = isFull,
+                screenType = screenType,
                 onShowDetail = onShowDetail
             )
         }

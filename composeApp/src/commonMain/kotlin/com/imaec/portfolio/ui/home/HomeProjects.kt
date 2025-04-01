@@ -38,6 +38,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.imaec.portfolio.model.ProjectDetailVo
 import com.imaec.portfolio.model.ProjectVo
+import com.imaec.portfolio.model.ScreenType
+import com.imaec.portfolio.model.isWeb
 import com.imaec.portfolio.theme.Gray100
 import com.imaec.portfolio.theme.Gray200
 import com.imaec.portfolio.theme.Gray50
@@ -57,7 +59,10 @@ import portfolio.composeapp.generated.resources.ic_arrow_left
 import portfolio.composeapp.generated.resources.ic_arrow_right
 
 @Composable
-fun HomeProjects(isFull: Boolean, onShowDetail: (ProjectDetailVo) -> Unit) {
+fun HomeProjects(
+    screenType: ScreenType,
+    onShowDetail: (ProjectDetailVo) -> Unit
+) {
     var isFontLoad by remember { mutableStateOf(false) }
 
     LaunchedEffect(isFontLoad) {
@@ -67,36 +72,44 @@ fun HomeProjects(isFull: Boolean, onShowDetail: (ProjectDetailVo) -> Unit) {
         }
     }
 
-    Column(verticalArrangement = Arrangement.spacedBy(if (isFull) 60.dp else 20.dp)) {
-        Title(title = "Projects", isFull = isFull, isFontLoad = isFontLoad)
-        Column(verticalArrangement = Arrangement.spacedBy(if (isFull) 10.dp else 8.dp)) {
+    Column(verticalArrangement = Arrangement.spacedBy(if (screenType.isWeb()) 60.dp else 20.dp)) {
+        Title(
+            title = "Projects",
+            screenType = screenType,
+            isFontLoad = isFontLoad
+        )
+        Column(
+            verticalArrangement = Arrangement.spacedBy(if (screenType.isWeb()) 10.dp else 8.dp)
+        ) {
             Text(
                 text = "Company Projects",
                 style = TextStyle(
                     color = Gray200,
-                    fontSize = if (isFull) 36.sp else 16.sp,
+                    fontSize = if (screenType.isWeb()) 36.sp else 16.sp,
                     fontWeight = FontWeight.SemiBold,
                     fontFamily = if (isFontLoad) firaCode() else null
                 )
             )
             CompanyProjects(
-                isFull = isFull,
+                screenType = screenType,
                 isFontLoad = isFontLoad,
                 onShowDetail = onShowDetail
             )
         }
-        Column(verticalArrangement = Arrangement.spacedBy(if (isFull) 10.dp else 8.dp)) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(if (screenType.isWeb()) 10.dp else 8.dp)
+        ) {
             Text(
                 text = "Team Projects",
                 style = TextStyle(
                     color = Gray200,
-                    fontSize = if (isFull) 36.sp else 16.sp,
+                    fontSize = if (screenType.isWeb()) 36.sp else 16.sp,
                     fontWeight = FontWeight.SemiBold,
                     fontFamily = if (isFontLoad) firaCode() else null
                 )
             )
             TeamProjects(
-                isFull = isFull,
+                screenType = screenType,
                 isFontLoad = isFontLoad,
                 onShowDetail = onShowDetail
             )
@@ -106,22 +119,25 @@ fun HomeProjects(isFull: Boolean, onShowDetail: (ProjectDetailVo) -> Unit) {
 
 @Composable
 private fun CompanyProjects(
-    isFull: Boolean,
+    screenType: ScreenType,
     isFontLoad: Boolean,
     onShowDetail: (ProjectDetailVo) -> Unit
 ) {
     Column(
         modifier = Modifier
             .width(1440.dp)
-            .background(color = Gray800, shape = RoundedCornerShape(if (isFull) 16.dp else 8.dp))
+            .background(
+                color = Gray800,
+                shape = RoundedCornerShape(if (screenType.isWeb()) 16.dp else 8.dp)
+            )
             .padding(
-                horizontal = if (isFull) 50.dp else 16.dp,
-                vertical = if (isFull) 80.dp else 24.dp
+                horizontal = if (screenType.isWeb()) 50.dp else 16.dp,
+                vertical = if (screenType.isWeb()) 80.dp else 24.dp
             ),
-        verticalArrangement = Arrangement.spacedBy(if (isFull) 60.dp else 24.dp)
+        verticalArrangement = Arrangement.spacedBy(if (screenType.isWeb()) 60.dp else 24.dp)
     ) {
         ProjectGroup(
-            isFull = isFull,
+            screenType = screenType,
             isFontLoad = isFontLoad,
             title = "브랜드엑스피트니스",
             projects = ProjectVo.brandxfitnessItems(),
@@ -129,7 +145,7 @@ private fun CompanyProjects(
             onShowDetail = onShowDetail
         )
         ProjectGroup(
-            isFull = isFull,
+            screenType = screenType,
             isFontLoad = isFontLoad,
             title = "라이픽",
             projects = ProjectVo.lificItems(),
@@ -137,7 +153,7 @@ private fun CompanyProjects(
             onShowDetail = onShowDetail
         )
         ProjectGroup(
-            isFull = isFull,
+            screenType = screenType,
             isFontLoad = isFontLoad,
             title = "티모넷",
             projects = ProjectVo.tmonetItems(),
@@ -145,7 +161,7 @@ private fun CompanyProjects(
             onShowDetail = onShowDetail
         )
         ProjectGroup(
-            isFull = isFull,
+            screenType = screenType,
             isFontLoad = isFontLoad,
             title = "예스폼",
             projects = ProjectVo.yesformItems(),
@@ -157,22 +173,25 @@ private fun CompanyProjects(
 
 @Composable
 private fun TeamProjects(
-    isFull: Boolean,
+    screenType: ScreenType,
     isFontLoad: Boolean,
     onShowDetail: (ProjectDetailVo) -> Unit
 ) {
     Column(
         modifier = Modifier
             .width(1440.dp)
-            .background(color = Gray800, shape = RoundedCornerShape(if (isFull) 16.dp else 8.dp))
+            .background(
+                color = Gray800,
+                shape = RoundedCornerShape(if (screenType.isWeb()) 16.dp else 8.dp)
+            )
             .padding(
-                horizontal = if (isFull) 50.dp else 16.dp,
-                vertical = if (isFull) 80.dp else 24.dp
+                horizontal = if (screenType.isWeb()) 50.dp else 16.dp,
+                vertical = if (screenType.isWeb()) 80.dp else 24.dp
             ),
-        verticalArrangement = Arrangement.spacedBy(if (isFull) 60.dp else 24.dp)
+        verticalArrangement = Arrangement.spacedBy(if (screenType.isWeb()) 60.dp else 24.dp)
     ) {
         ProjectGroup(
-            isFull = isFull,
+            screenType = screenType,
             isFontLoad = isFontLoad,
             title = "아파트임당",
             projects = ProjectVo.imdangItems(),
@@ -184,7 +203,7 @@ private fun TeamProjects(
 
 @Composable
 private fun ProjectGroup(
-    isFull: Boolean,
+    screenType: ScreenType,
     isFontLoad: Boolean,
     title: String,
     projects: List<ProjectVo>,
@@ -196,23 +215,23 @@ private fun ProjectGroup(
 
     Column {
         Text(
-            modifier = Modifier.padding(horizontal = if (isFull) 72.dp else 32.dp),
+            modifier = Modifier.padding(horizontal = if (screenType.isWeb()) 72.dp else 32.dp),
             text = title,
             style = TextStyle(
                 color = White,
-                fontSize = if (isFull) 30.sp else 16.sp,
+                fontSize = if (screenType.isWeb()) 30.sp else 16.sp,
                 fontWeight = FontWeight.SemiBold,
                 fontFamily = if (isFontLoad) pretendard() else null
             )
         )
         Row(
-            modifier = Modifier.padding(vertical = if (isFull) 20.dp else 12.dp),
-            horizontalArrangement = Arrangement.spacedBy(if (isFull) 16.dp else 8.dp),
+            modifier = Modifier.padding(vertical = if (screenType.isWeb()) 20.dp else 12.dp),
+            horizontalArrangement = Arrangement.spacedBy(if (screenType.isWeb()) 16.dp else 8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
                 modifier = Modifier
-                    .size(if (isFull) 56.dp else 24.dp)
+                    .size(if (screenType.isWeb()) 56.dp else 24.dp)
                     .clip(CircleShape)
                     .clickable {
                         coroutineScope.launch {
@@ -232,14 +251,16 @@ private fun ProjectGroup(
                 state = listState,
                 modifier = Modifier
                     .weight(1f)
-                    .height(if (isFull) 400.dp else 200.dp),
-                horizontalArrangement = Arrangement.spacedBy(if (isFull) 36.dp else 16.dp),
+                    .height(if (screenType.isWeb()) 400.dp else 200.dp),
+                horizontalArrangement = Arrangement.spacedBy(
+                    if (screenType.isWeb()) 36.dp else 16.dp
+                ),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 itemsIndexed(projects) { index, item ->
                     ProjectItem(
                         project = item,
-                        isFull = isFull,
+                        screenType = screenType,
                         isFontLoad = isFontLoad,
                         onShowDetail = {
                             onShowDetail(projectDetails[index])
@@ -249,11 +270,13 @@ private fun ProjectGroup(
             }
             Icon(
                 modifier = Modifier
-                    .size(if (isFull) 56.dp else 24.dp)
+                    .size(if (screenType.isWeb()) 56.dp else 24.dp)
                     .clip(CircleShape)
                     .clickable {
                         coroutineScope.launch {
-                            val targetIndex = if (listState.firstVisibleItemIndex < projects.lastIndex) {
+                            val targetIndex = if (
+                                listState.firstVisibleItemIndex < projects.lastIndex
+                            ) {
                                 listState.firstVisibleItemIndex + 1
                             } else {
                                 projects.lastIndex
@@ -273,26 +296,29 @@ private fun ProjectGroup(
 @Composable
 private fun ProjectItem(
     project: ProjectVo,
-    isFull: Boolean,
+    screenType: ScreenType,
     isFontLoad: Boolean,
     onShowDetail: () -> Unit
 ) {
     Column(
         modifier = Modifier
-            .width(if (isFull) 374.67.dp else 220.dp)
-            .height(if (isFull) 366.dp else 200.dp)
-            .background(color = Gray50, shape = RoundedCornerShape(if (isFull) 12.dp else 8.dp))
-            .clip(RoundedCornerShape(if (isFull) 12.dp else 8.dp))
+            .width(if (screenType.isWeb()) 374.67.dp else 220.dp)
+            .height(if (screenType.isWeb()) 366.dp else 200.dp)
+            .background(
+                color = Gray50,
+                shape = RoundedCornerShape(if (screenType.isWeb()) 12.dp else 8.dp)
+            )
+            .clip(RoundedCornerShape(if (screenType.isWeb()) 12.dp else 8.dp))
             .clickable { onShowDetail() }
     ) {
         Image(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(if (isFull) 230.dp else 120.dp)
+                .height(if (screenType.isWeb()) 230.dp else 120.dp)
                 .clip(
                     RoundedCornerShape(
-                        topStart = if (isFull) 12.dp else 8.dp,
-                        topEnd = if (isFull) 12.dp else 8.dp
+                        topStart = if (screenType.isWeb()) 12.dp else 8.dp,
+                        topEnd = if (screenType.isWeb()) 12.dp else 8.dp
                     )
                 ),
             painter = painterResource(project.cover),
@@ -307,29 +333,31 @@ private fun ProjectItem(
                 .background(
                     color = Gray50,
                     shape = RoundedCornerShape(
-                        bottomStart = if (isFull) 12.dp else 8.dp,
-                        bottomEnd = if (isFull) 12.dp else 8.dp
+                        bottomStart = if (screenType.isWeb()) 12.dp else 8.dp,
+                        bottomEnd = if (screenType.isWeb()) 12.dp else 8.dp
                     )
                 )
-                .padding(if (isFull) 16.dp else 8.dp),
+                .padding(if (screenType.isWeb()) 16.dp else 8.dp),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
                 text = project.title,
                 style = TextStyle(
                     color = Gray900,
-                    fontSize = if (isFull) 16.sp else 10.sp,
+                    fontSize = if (screenType.isWeb()) 16.sp else 10.sp,
                     fontWeight = FontWeight.SemiBold,
                     fontFamily = if (isFontLoad) pretendard() else null
                 )
             )
             FlowRow(
-                horizontalArrangement = Arrangement.spacedBy(if (isFull) 6.dp else 2.dp),
-                verticalArrangement = Arrangement.spacedBy(if (isFull) 6.dp else 2.dp)
+                horizontalArrangement = Arrangement.spacedBy(
+                    if (screenType.isWeb()) 6.dp else 2.dp
+                ),
+                verticalArrangement = Arrangement.spacedBy(if (screenType.isWeb()) 6.dp else 2.dp)
             ) {
                 project.tags.forEach { tag ->
                     Tag(
-                        isFull = isFull,
+                        screenType = screenType,
                         text = tag,
                         fontFamily = if (isFontLoad) firaCode() else null
                     )

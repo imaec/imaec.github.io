@@ -28,6 +28,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.imaec.portfolio.model.ProfileVo
+import com.imaec.portfolio.model.ScreenType
+import com.imaec.portfolio.model.isWeb
 import com.imaec.portfolio.theme.Gray500
 import com.imaec.portfolio.theme.White
 import com.imaec.portfolio.theme.firaCode
@@ -38,7 +40,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomeTopBar(
     listState: LazyListState,
-    isFull: Boolean
+    screenType: ScreenType
 ) {
     val coroutineScope = rememberCoroutineScope()
     val menu by remember {
@@ -73,7 +75,47 @@ fun HomeTopBar(
     }
 
 
-    if (!isFull) {
+    if (screenType.isWeb()) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    start = 100.dp,
+                    end = 84.dp,
+                    top = 24.dp,
+                    bottom = 24.dp,
+                ),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = ProfileVo().name,
+                style = TextStyle(
+                    color = White,
+                    fontSize = 32.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = if (isFontLoad) firaCode() else null
+                )
+            )
+            Row(horizontalArrangement = Arrangement.spacedBy(20.dp)) {
+                menu.forEach {
+                    TopBarMenu(
+                        screenType = screenType,
+                        isFontLoad = isFontLoad,
+                        menu = it,
+                        isSelected = it == selectedMenu,
+                        onClickMenu = { clickedMenu ->
+                            isUserScrolling = true
+                            selectedMenu = clickedMenu
+                            coroutineScope.launch {
+                                listState.animateScrollToItem(menu.indexOf(clickedMenu))
+                                isUserScrolling = false
+                            }
+                        }
+                    )
+                }
+            }
+        }
+    } else {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -99,47 +141,7 @@ fun HomeTopBar(
             ) {
                 menu.forEach {
                     TopBarMenu(
-                        isFull = isFull,
-                        isFontLoad = isFontLoad,
-                        menu = it,
-                        isSelected = it == selectedMenu,
-                        onClickMenu = { clickedMenu ->
-                            isUserScrolling = true
-                            selectedMenu = clickedMenu
-                            coroutineScope.launch {
-                                listState.animateScrollToItem(menu.indexOf(clickedMenu))
-                                isUserScrolling = false
-                            }
-                        }
-                    )
-                }
-            }
-        }
-    } else {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(
-                    start = 100.dp,
-                    end = 84.dp,
-                    top = 24.dp,
-                    bottom = 24.dp,
-                ),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(
-                text = ProfileVo().name,
-                style = TextStyle(
-                    color = White,
-                    fontSize = 32.sp,
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = if (isFontLoad) firaCode() else null
-                )
-            )
-            Row(horizontalArrangement = Arrangement.spacedBy(20.dp)) {
-                menu.forEach {
-                    TopBarMenu(
-                        isFull = isFull,
+                        screenType = screenType,
                         isFontLoad = isFontLoad,
                         menu = it,
                         isSelected = it == selectedMenu,
@@ -160,7 +162,7 @@ fun HomeTopBar(
 
 @Composable
 private fun TopBarMenu(
-    isFull: Boolean,
+    screenType: ScreenType,
     isFontLoad: Boolean,
     menu: String,
     isSelected: Boolean,
@@ -171,8 +173,8 @@ private fun TopBarMenu(
             .clip(RoundedCornerShape(8.dp))
             .clickable { onClickMenu(menu) }
             .padding(
-                horizontal = if (isFull) 16.dp else 8.dp,
-                vertical = if (isFull) 8.dp else 4.dp
+                horizontal = if (screenType.isWeb()) 16.dp else 8.dp,
+                vertical = if (screenType.isWeb()) 8.dp else 4.dp
             ),
         contentAlignment = Alignment.Center
     ) {
@@ -180,7 +182,7 @@ private fun TopBarMenu(
             text = menu,
             style = TextStyle(
                 color = if (isSelected) White else Gray500,
-                fontSize = if (isFull) 24.sp else 16.sp,
+                fontSize = if (screenType.isWeb()) 24.sp else 16.sp,
                 fontWeight = FontWeight.Bold,
                 fontFamily = if (isFontLoad) firaCode() else null
             )

@@ -28,6 +28,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.imaec.portfolio.model.ProfileVo
+import com.imaec.portfolio.model.ScreenType
+import com.imaec.portfolio.model.isWeb
 import com.imaec.portfolio.theme.Gray200
 import com.imaec.portfolio.theme.Gray300
 import com.imaec.portfolio.theme.White
@@ -42,7 +44,7 @@ import portfolio.composeapp.generated.resources.ic_notion
 
 @Composable
 fun HomeProfile(
-    isFull: Boolean,
+    screenType: ScreenType,
     onClickLink: (String) -> Unit
 ) {
     val profile by remember { mutableStateOf(ProfileVo()) }
@@ -58,12 +60,14 @@ fun HomeProfile(
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(if (isFull) 160.dp else 40.dp),
+        horizontalArrangement = Arrangement.spacedBy(if (screenType.isWeb()) 160.dp else 40.dp),
     ) {
-        Column(verticalArrangement = Arrangement.spacedBy(if (isFull) 56.dp else 12.dp)) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(if (screenType.isWeb()) 56.dp else 12.dp)
+        ) {
             Image(
                 modifier = Modifier
-                    .size(if (isFull) 250.dp else 80.dp)
+                    .size(if (screenType.isWeb()) 250.dp else 80.dp)
                     .clip(CircleShape)
                     .background(White),
                 painter = painterResource(profile.profile),
@@ -71,64 +75,66 @@ fun HomeProfile(
             )
             Row(
                 modifier = Modifier
-                    .width(if (isFull) 250.dp else 80.dp)
-                    .padding(horizontal = if (isFull) 10.dp else 4.dp),
+                    .width(if (screenType.isWeb()) 250.dp else 80.dp)
+                    .padding(horizontal = if (screenType.isWeb()) 10.dp else 4.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Icon(
                     modifier = Modifier
-                        .size(if (isFull) 64.dp else 24.dp)
+                        .size(if (screenType.isWeb()) 64.dp else 24.dp)
                         .clip(CircleShape)
                         .clickable {
                             onClickLink(profile.githubUrl)
                         }
-                        .padding(if (isFull) 12.dp else 4.dp),
+                        .padding(if (screenType.isWeb()) 12.dp else 4.dp),
                     imageVector = vectorResource(Res.drawable.ic_github),
                     tint = White,
                     contentDescription = null
                 )
                 Icon(
                     modifier = Modifier
-                        .size(if (isFull) 64.dp else 24.dp)
+                        .size(if (screenType.isWeb()) 64.dp else 24.dp)
                         .clip(CircleShape)
                         .clickable {
                             onClickLink(profile.notionUrl)
                         }
-                        .padding(if (isFull) 12.dp else 4.dp),
+                        .padding(if (screenType.isWeb()) 12.dp else 4.dp),
                     imageVector = vectorResource(Res.drawable.ic_notion),
                     tint = White,
                     contentDescription = null
                 )
                 Icon(
                     modifier = Modifier
-                        .size(if (isFull) 64.dp else 24.dp)
+                        .size(if (screenType.isWeb()) 64.dp else 24.dp)
                         .clip(CircleShape)
                         .clickable {
                             onClickLink(profile.mailUrl)
                         }
-                        .padding(if (isFull) 12.dp else 4.dp),
+                        .padding(if (screenType.isWeb()) 12.dp else 4.dp),
                     imageVector = vectorResource(Res.drawable.ic_mail),
                     tint = White,
                     contentDescription = null
                 )
             }
         }
-        Column(verticalArrangement = Arrangement.spacedBy(if (isFull) 48.dp else 12.dp)) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(if (screenType.isWeb()) 48.dp else 12.dp)
+        ) {
             Text(
                 text = "Hello, I am",
                 style = TextStyle(
                     color = Gray200,
-                    fontSize = if (isFull) 40.sp else 16.sp,
+                    fontSize = if (screenType.isWeb()) 40.sp else 16.sp,
                     fontWeight = FontWeight.Bold,
                     fontFamily = if (isFontLoad) firaCode() else null
                 )
             )
             Text(
-                modifier = Modifier.width(if (isFull) 550.dp else 200.dp),
+                modifier = Modifier.width(if (screenType.isWeb()) 550.dp else 200.dp),
                 text = profile.name,
                 style = TextStyle(
                     color = White,
-                    fontSize = if (isFull) 60.sp else 24.sp,
+                    fontSize = if (screenType.isWeb()) 60.sp else 24.sp,
                     fontWeight = FontWeight.Bold,
                     fontFamily = if (isFontLoad) firaCode() else null
                 ),
@@ -138,21 +144,25 @@ fun HomeProfile(
                 text = "Android Developer",
                 style = TextStyle(
                     color = White,
-                    fontSize = if (isFull) 48.sp else 20.sp,
+                    fontSize = if (screenType.isWeb()) 48.sp else 20.sp,
                     fontWeight = FontWeight.Bold,
                     fontFamily = if (isFontLoad) firaCode() else null
                 )
             )
-            Row(horizontalArrangement = Arrangement.spacedBy(if (isFull) 48.dp else 20.dp)) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(
+                    if (screenType.isWeb()) 48.dp else 20.dp
+                )
+            ) {
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(if (isFull) 16.dp else 4.dp),
+                    horizontalArrangement = Arrangement.spacedBy(if (screenType.isWeb()) 16.dp else 4.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
                         text = "${profile.experience}",
                         style = TextStyle(
                             color = Gray300,
-                            fontSize = if (isFull) 86.sp else 30.sp,
+                            fontSize = if (screenType.isWeb()) 86.sp else 30.sp,
                             fontWeight = FontWeight.Bold,
                             fontFamily = if (isFontLoad) firaCode() else null
                         )
@@ -161,21 +171,23 @@ fun HomeProfile(
                         text = "YEARS OF\nEXPERIENCE",
                         style = TextStyle(
                             color = Gray200,
-                            fontSize = if (isFull) 28.sp else 12.sp,
+                            fontSize = if (screenType.isWeb()) 28.sp else 12.sp,
                             fontWeight = FontWeight.Normal,
                             fontFamily = if (isFontLoad) firaCode() else null
                         )
                     )
                 }
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(if (isFull) 16.dp else 4.dp),
+                    horizontalArrangement = Arrangement.spacedBy(
+                        if (screenType.isWeb()) 16.dp else 4.dp
+                    ),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
                         text = "${profile.projectCount}",
                         style = TextStyle(
                             color = Gray300,
-                            fontSize = if (isFull) 86.sp else 30.sp,
+                            fontSize = if (screenType.isWeb()) 86.sp else 30.sp,
                             fontWeight = FontWeight.Bold,
                             fontFamily = if (isFontLoad) firaCode() else null
                         )
@@ -184,7 +196,7 @@ fun HomeProfile(
                         text = "PROJECTS\nCOMPLETED",
                         style = TextStyle(
                             color = Gray200,
-                            fontSize = if (isFull) 28.sp else 12.sp,
+                            fontSize = if (screenType.isWeb()) 28.sp else 12.sp,
                             fontWeight = FontWeight.Normal,
                             fontFamily = if (isFontLoad) firaCode() else null
                         )
