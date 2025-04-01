@@ -1,14 +1,8 @@
 package com.imaec.portfolio.theme
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.Font
 import portfolio.composeapp.generated.resources.Res
 import portfolio.composeapp.generated.resources.firacode_bold

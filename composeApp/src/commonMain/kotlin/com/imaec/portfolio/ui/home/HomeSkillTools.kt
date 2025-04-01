@@ -18,7 +18,6 @@ import androidx.compose.ui.unit.sp
 import com.imaec.portfolio.model.SkillVo
 import com.imaec.portfolio.theme.Gray100
 import com.imaec.portfolio.theme.White
-import com.imaec.portfolio.theme.firaCode
 import com.imaec.portfolio.theme.pretendard
 import com.imaec.portfolio.ui.common.Title
 import kotlinx.coroutines.delay

@@ -1,7 +1,5 @@
 package com.imaec.portfolio
 
-import platform.UIKit.UIDevice
-
 class IOSPlatform: Platform {
     override val name: String = "iOS"
 }

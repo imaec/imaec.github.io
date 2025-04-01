@@ -1,7 +1,6 @@
 package com.imaec.portfolio
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -9,7 +8,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.layout.Layout
 import com.imaec.portfolio.model.ProjectDetailVo
 import com.imaec.portfolio.ui.home.HomeScreen
-import kotlinx.coroutines.delay
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
