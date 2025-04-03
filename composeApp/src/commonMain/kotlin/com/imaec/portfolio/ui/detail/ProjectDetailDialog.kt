@@ -78,32 +78,44 @@ fun ProjectDetailDialog(
     onDismiss: () -> Unit
 ) {
     var visible by remember { mutableStateOf(false) }
+    var coverImage: DrawableResource? by remember { mutableStateOf(null) }
 
     LaunchedEffect(Unit) {
         visible = true
     }
 
-    Box(
-        modifier = Modifier
-            .animateContentSize()
-            .fillMaxSize()
-            .background(Gray900.copy(alpha = 0.8f))
-            .clickable(
-                enabled = true,
-                indication = null,
-                interactionSource = remember { MutableInteractionSource() }
-            ) { onDismiss() }
-    ) {
-        AnimatedVisibility(
-            visible = visible,
-            enter = scaleIn() + fadeIn(),
-            exit = scaleOut() + fadeOut()
+    Box {
+        Box(
+            modifier = Modifier
+                .animateContentSize()
+                .fillMaxSize()
+                .background(Gray900.copy(alpha = 0.8f))
+                .clickable(
+                    enabled = true,
+                    indication = null,
+                    interactionSource = remember { MutableInteractionSource() }
+                ) { onDismiss() }
         ) {
-            Dialog(
-                screenType = screenType,
-                projectDetail = projectDetail,
-                onClickLink = onClickLink,
-                onDismiss = onDismiss
+            AnimatedVisibility(
+                visible = visible,
+                enter = scaleIn() + fadeIn(),
+                exit = scaleOut() + fadeOut()
+            ) {
+                Dialog(
+                    screenType = screenType,
+                    projectDetail = projectDetail,
+                    onClickLink = onClickLink,
+                    onClickCoverImage = { coverImage = it },
+                    onDismiss = onDismiss
+                )
+            }
+        }
+        if (coverImage != null) {
+            CoverDetailDialog(
+                coverImage = coverImage!!,
+                onDismiss = {
+                    coverImage = null
+                }
             )
         }
     }
@@ -114,6 +126,7 @@ private fun Dialog(
     screenType: ScreenType,
     projectDetail: ProjectDetailVo,
     onClickLink: (String) -> Unit,
+    onClickCoverImage: (DrawableResource) -> Unit,
     onDismiss: () -> Unit
 ) {
     val density = LocalDensity.current
@@ -245,9 +258,12 @@ private fun Dialog(
                         }
                         if (projectDetail.cover != null) {
                             Image(
-                                modifier = Modifier.width(
-                                    if (screenType.isWeb()) 800.dp else 240.dp
-                                ),
+                                modifier = Modifier
+                                    .width(if (screenType.isWeb()) 800.dp else 240.dp)
+                                    .pointerHoverIcon(PointerIcon.Hand)
+                                    .clickable {
+                                        onClickCoverImage(projectDetail.cover)
+                                    },
                                 painter = painterResource(projectDetail.cover),
                                 contentScale = ContentScale.FillWidth,
                                 contentDescription = null
