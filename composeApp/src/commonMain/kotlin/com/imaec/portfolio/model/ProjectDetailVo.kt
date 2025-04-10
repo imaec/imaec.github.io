@@ -19,6 +19,7 @@ import portfolio.composeapp.generated.resources.img_cover_yesresume
 data class ProjectDetailVo(
     val cover: DrawableResource? = null,
     val title: String,
+    val period: String,
     val projectSummary: List<String>,
     val responsibilities: List<String>,
     val troubleShootings: List<String>,
@@ -31,6 +32,7 @@ data class ProjectDetailVo(
             ProjectDetailVo(
                 cover = Res.drawable.img_cover_wellnessbook_partner,
                 title = "웰니스북 파트너\nFlutter 앱",
+                period = "2024. 08. 24 ~ 2024. 10. 04",
                 projectSummary = listOf(
                     " • 웰니스북의 Business 고객인 파트너들이 프로그램 및 고객을 관리할 수 있는 앱",
                     " • Flutter를 이용해서 안드로이드와 iOS 동시 개발",
@@ -60,6 +62,7 @@ data class ProjectDetailVo(
             ProjectDetailVo(
                 cover = Res.drawable.img_cover_wellnessbook,
                 title = "웰니스북\nFlutter 앱",
+                period = "2023. 12. 21 ~ 2024. 10. 22",
                 projectSummary = listOf(
                     " • 부티크 운동 예약 플랫폼 웰니스북 앱 개발",
                     " • Flutter를 이용해서 안드로이드와 iOS를 동시 개발",
@@ -106,6 +109,7 @@ data class ProjectDetailVo(
             ProjectDetailVo(
                 cover = Res.drawable.img_cover_kookminpt,
                 title = "국민피티\n안드로이드 앱",
+                period = "2022. 11. 15 ~ 2024. 06. 25",
                 projectSummary = listOf(
                     " • 운동 O2O 플랫폼 국민피티 안드로이드 앱 개발",
                     " • 주요 기능 개발부터 성능 최적화, 보안 강화까지 전반적인 서비스 개발 담당"
@@ -139,6 +143,7 @@ data class ProjectDetailVo(
             ProjectDetailVo(
                 cover = Res.drawable.img_cover_kookminpt,
                 title = "국민피티\niOS 앱",
+                period = "2023. 08. 16 ~ 2024. 06. 25",
                 projectSummary = listOf(
                     " • 운동 O2O 플랫폼 국민피티 iOS 앱 개발",
                     " • 사용자 편의를 위한 빠른 문의 기능 구현",
@@ -168,6 +173,7 @@ data class ProjectDetailVo(
             ProjectDetailVo(
                 cover = Res.drawable.img_cover_lific,
                 title = "라이픽\n안드로이드 앱",
+                period = "2021. 07. 19 ~ 2022. 07. 22",
                 projectSummary = listOf(
                     " • 뷰티/피트니스 종합 플랫폼 라이픽 앱 개발",
                     " • 앱 초기 개발부터 서비스 출시까지 수행"
@@ -196,6 +202,7 @@ data class ProjectDetailVo(
             ProjectDetailVo(
                 cover = Res.drawable.img_cover_fido1,
                 title = "FIDO1 Client +\nAuthenticator Combo",
+                period = "2021. 01. 26 ~ 2021. 05. 29",
                 projectSummary = listOf(
                     " • 비밀번호 없이 인증을 할 수 있는 FIDO1 UAF 프로토콜 기반의 인증 장치 개발",
                     " • Android 환경에서 동작하는 FIDO Client 구현",
@@ -225,6 +232,7 @@ data class ProjectDetailVo(
             ProjectDetailVo(
                 cover = null,
                 title = "페라비트\n안드로이드 앱",
+                period = "2020. 10. 19 ~ 2021. 05. 28",
                 projectSummary = listOf(
                     " • 가상자산(암호화폐)를 안전하게 관리할 수 있는 페라비트 안드로이드 앱 개발",
                     " • FIDO1 인증을 통한 보안 강화",
@@ -254,6 +262,7 @@ data class ProjectDetailVo(
             ProjectDetailVo(
                 cover = Res.drawable.img_cover_fido2,
                 title = "FIDO2 Android\nBLE Authenticator",
+                period = "2020. 06. 02 ~ 2021. 04. 30",
                 projectSummary = listOf(
                     " • FIDO2 기반 BLE Authenticator를 개발하여 개인 기기를 안전한 인증 장치로 활용할 수 있도록 구현",
                     " • CTAP2 CBOR API를 통해 WebBrowser(FIDO Client)와 통신",
@@ -287,6 +296,7 @@ data class ProjectDetailVo(
             ProjectDetailVo(
                 cover = Res.drawable.img_cover_damdam,
                 title = "댐댐\n안드로이드 앱",
+                period = "2020. 02. 04 ~ 2021. 07. 02",
                 projectSummary = listOf(
                     " • 교통카드 잔액 충전/조회 서비스 댐댐 안드로이드 앱 리뉴얼 및 유지보수",
                     " • 기존 외주 개발자들이 작업한 코드의 일관성 및 가독성 개선",
@@ -317,6 +327,7 @@ data class ProjectDetailVo(
             ProjectDetailVo(
                 cover = null,
                 title = "페이코 전용 티머니 플라스틱\n카드 결제 모듈",
+                period = "2020. 01. 06 ~ 2021. 01. 31",
                 projectSummary = listOf(
                     " • 페이코 전용 티머니 플라스틱 카드 결제 기능을 독립적인 모듈로 개발",
                     " • 기존 결제 및 충전 모듈에서 결제 부분만 분리",
@@ -340,6 +351,7 @@ data class ProjectDetailVo(
             ProjectDetailVo(
                 cover = Res.drawable.img_cover_yesform,
                 title = "예스폼\n안드로이드, iOS 앱",
+                period = "2018. 09. 03 ~ 2018. 12. 07",
                 projectSummary = listOf(
                     " • 서식 양식, 교통카드 잔액 충전/조회 서비스 댐댐 안드로이드 앱 리뉴얼 및 유지보수",
                     " • 성능, 편의성, UX 개선을 위한 네이티브 리뉴얼"
@@ -369,6 +381,7 @@ data class ProjectDetailVo(
             ProjectDetailVo(
                 cover = Res.drawable.img_cover_yesresume,
                 title = "예스레쥬메\n안드로이드, iOS 앱",
+                period = "2017. 04. 10 ~ 2017. 11. 23",
                 projectSummary = listOf(
                     " • 2만여 가지의 자기소개서 구성항목을 활용하여 자기소개서 작성을 지원하는 서비스 예스레쥬메 앱 개발",
                     " • ‘예스폼’ 앱과의 연동으로 자기소개서 샘플 가져오기 기능 개발"
@@ -395,6 +408,7 @@ data class ProjectDetailVo(
             ProjectDetailVo(
                 cover = Res.drawable.img_cover_imdang,
                 title = "아파트임당\n안드로이드 앱",
+                period = "2024. 10. 31 ~ 2025. 02. 28",
                 projectSummary = listOf(
                     " • 아파트 임장 후기 공유 서비스 아파트임장 안드로이드 앱 개발",
                     " • 단순 SNS 게시글 공유 방식이 아닌 회원간 게시글 교환 시스템",

@@ -273,7 +273,7 @@ private fun Dialog(
                             modifier = Modifier.padding(
                                 top = if (screenType.isWeb()) 10.dp else 4.dp
                             ),
-                            text = "2024. 08. 02 ~ 2024. 10. 04",
+                            text = projectDetail.period,
                             style = TextStyle(
                                 color = Gray900,
                                 fontSize = if (screenType.isWeb()) 16.sp else 10.sp,
